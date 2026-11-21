@@ -38,7 +38,7 @@
   color-scheme: dark;
 }
 [hidden] { display: none !important; }
-html, body { height: 100%; margin: 0; }
+html, body { height: 100%; height: 100dvh; margin: 0; }
 body {
   background: var(--bg);
   color: var(--fg);
@@ -340,17 +340,30 @@ body.spinning .ui, body.spinning .callout, body.spinning #leader { opacity: 0; v
 
 :focus-visible { outline: 2px solid var(--scan); outline-offset: 2px; }
 
+/* ---------- tablet landscape & compact laptops ---------- */
+@media (min-width: 901px) and (max-width: 1180px) {
+  .ui { grid-template-columns: minmax(212px, 1fr) minmax(0, 500px) minmax(244px, 1fr); gap: 9px; }
+  .leftcol { width: 212px; }
+  .panel { width: 244px; padding: 11px; gap: 12px; }
+  .brand .mark { font-size: 17px; }
+  .pname { font-size: clamp(19px, 2.2vw, 28px); }
+}
+
 /* ---------- phones / narrow ---------- */
 @media (max-width: 900px) {
-  .ui { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto auto auto minmax(0, 1fr) auto; gap: 8px; }
+  .ui {
+    grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto auto auto minmax(0, 1fr) auto; gap: 8px;
+    padding-block: calc(env(safe-area-inset-top, 0px) + 10px) calc(env(safe-area-inset-bottom, 0px) + 10px);
+    padding-left: max(10px, env(safe-area-inset-left, 0px)); padding-right: max(10px, env(safe-area-inset-right, 0px));
+  }
   .brand { grid-column: 1; grid-row: 1; justify-self: center; }
   .lockup { gap: 9px; }
   .home .logo-mark { height: 16px; }
   .brand .mark { font-size: 15px; }
-  .prompt { grid-column: 1; grid-row: 2; align-self: stretch; padding: 10px 14px; z-index: 3; }
-  .pmore { padding: 2px 14px 10px; }
-  .pname { font-size: clamp(19px, 5.6vw, 26px); }
-  .ptip { font-size: 12px; }
+  .prompt { grid-column: 1; grid-row: 2; align-self: stretch; padding: 9px 12px; z-index: 3; }
+  .pmore { padding: 2px 12px 10px; }
+  .pname { font-size: clamp(18px, 5.2vw, 25px); white-space: normal; overflow: visible; }
+  .ptip { font-size: 12px; min-height: 0; max-width: 100%; }
   .stats { grid-column: 1; grid-row: 3; justify-self: center; }
   .stat { padding: 4px 9px; min-width: 56px; }
   .stat b { font-size: 14px; }
@@ -359,7 +372,7 @@ body.spinning .ui, body.spinning .callout, body.spinning #leader { opacity: 0; v
   .rail {
     grid-column: 1; grid-row: 4; width: 100%; min-height: 0; max-height: none; overflow-x: auto; overflow-y: hidden;
     display: flex; flex-wrap: nowrap; gap: 5px; padding: 0; background: none; border: 0; backdrop-filter: none; -webkit-backdrop-filter: none;
-    scrollbar-width: none;
+    scrollbar-width: none; -webkit-overflow-scrolling: touch;
   }
   .rail::-webkit-scrollbar { display: none; }
   .rail-title { display: none; }
@@ -369,7 +382,7 @@ body.spinning .ui, body.spinning .callout, body.spinning #leader { opacity: 0; v
   .dock .btn { padding: 9px 12px; }
   #settingsBtn, #viewBtn { display: inline-block; }
   .panel, .viewcard {
-    position: fixed; left: 0; right: 0; bottom: 0; width: auto; max-height: 72vh; overflow-y: auto; z-index: 15;
+    position: fixed; left: 0; right: 0; bottom: 0; width: auto; max-height: 76dvh; overflow-y: auto; z-index: 15;
     border-radius: 16px 16px 0 0; border-bottom: 0;
     padding-block: 16px calc(env(safe-area-inset-bottom, 0px) + 16px);
     padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
@@ -382,7 +395,20 @@ body.spinning .ui, body.spinning .callout, body.spinning #leader { opacity: 0; v
   .zchip { padding: 8px 9px; }
   .zchip kbd { display: none; }
   .narrow-only { display: block; }
-  .callout { font-size: 13px; }
+  .callout { font-size: 13px; max-width: calc(100vw - 24px); white-space: normal; }
+}
+@media (max-width: 560px) {
+  .dock { gap: 5px; width: 100%; }
+  .dock .btn { padding: 8px 10px; font-size: 12.5px; }
+  .prompt::before { display: none; }
+  .answer { flex-direction: column; }
+}
+@media (max-width: 950px) and (max-height: 520px) {
+  .stats { display: none; }
+  .prompt { padding: 6px 10px; gap: 2px; }
+  .pname { font-size: 17px; }
+  .ptip { display: none; }
+  .dock .btn { padding: 6px 10px; font-size: 12px; }
 }
 .close-sheet { display: none; justify-self: end; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }

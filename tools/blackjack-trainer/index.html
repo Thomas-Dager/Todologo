@@ -48,7 +48,7 @@
   color-scheme: dark;
 }
 [hidden] { display: none !important; }
-html, body { height: 100%; margin: 0; }
+html, body { height: 100%; height: 100dvh; margin: 0; }
 body {
   background: radial-gradient(120% 80% at 50% 45%, #121e28 0%, #0d151c 45%, var(--bg) 78%) fixed;
   color: var(--fg);
@@ -415,6 +415,10 @@ body.clean #cleanExit { display: inline-block; opacity: .55; }
 :focus-visible { outline: 2px solid var(--scan); outline-offset: 2px; }
 
 /* ---------- phones / narrow ---------- */
+@media (min-width: 901px) and (max-width: 1180px) {
+  .ui { grid-template-columns: minmax(212px, 240px) minmax(0, 1fr) minmax(244px, 272px); gap: 9px; }
+  .panel { width: auto; }
+}
 @media (max-width: 900px) {
   .ui { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto minmax(0, 1fr); gap: 8px; padding-block: calc(env(safe-area-inset-top, 0px) + 10px) calc(env(safe-area-inset-bottom, 0px) + 10px); }
   .brand { grid-column: 1; grid-row: 1; justify-self: center; }
@@ -427,7 +431,7 @@ body.clean #cleanExit { display: inline-block; opacity: .55; }
   .leftcol { grid-column: 1; grid-row: 2; width: 100%; }
   .rail {
     width: 100%; box-sizing: border-box; overflow-x: auto; overflow-y: hidden; display: flex; flex-wrap: nowrap; align-items: center; gap: 5px;
-    padding: 0; background: none; border: 0; scrollbar-width: none;
+    padding: 0; background: none; border: 0; scrollbar-width: none; -webkit-overflow-scrolling: touch;
   }
   .rail::-webkit-scrollbar { display: none; }
   .rail-title, .rail .path { display: none; }
@@ -437,7 +441,7 @@ body.clean #cleanExit { display: inline-block; opacity: .55; }
   .rail button.item em { display: none; }
   .centre { grid-column: 1; grid-row: 3; gap: 8px; }
   .prompt { padding: 9px 14px; }
-  .pname { font-size: clamp(19px, 5.6vw, 25px); }
+  .pname { font-size: clamp(19px, 5.6vw, 25px); white-space: normal; }
   .ptip { font-size: 12.5px; }
   .felt { padding: 12px 10px; border-radius: 14px; }
   .chart { border-spacing: 1.5px; }
@@ -452,7 +456,7 @@ body.clean #cleanExit { display: inline-block; opacity: .55; }
   #settingsBtn { display: inline-block; }
   .navrow .btn { padding: 8px 14px; }
   .panel {
-    position: fixed; left: 0; right: 0; bottom: 0; width: auto; max-height: 76vh; overflow-y: auto; z-index: 15;
+    position: fixed; left: 0; right: 0; bottom: 0; width: auto; max-height: 76dvh; overflow-y: auto; z-index: 15;
     border-radius: 16px 16px 0 0; border-bottom: 0; background: #0d141b;
     padding-block: 16px calc(env(safe-area-inset-bottom, 0px) + 16px);
     padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
@@ -465,6 +469,12 @@ body.clean #cleanExit { display: inline-block; opacity: .55; }
   .table .livecount .chip b { font-size: 13px; }
   .others { gap: 10px; }
   .trayrow { gap: 18px; }
+}
+@media (max-width: 520px) {
+  .chart th.rowh { width: 32px; font-size: 9.5px; }
+  .chart td button { font-size: 9.5px; height: 22px; }
+  .charts { max-width: 100%; overflow-x: auto; }
+  .act { padding: 10px 6px; font-size: 13.5px; }
 }
 @media (max-width: 900px) and (max-height: 640px) {
   .brand { display: none; }
