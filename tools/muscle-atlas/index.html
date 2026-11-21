@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en" data-atlas="muscle" data-short="840">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0f14">
+<link rel="icon" href="../../images/logo-cyan.png" type="image/png">
+<link rel="canonical" href="https://samplesize1.com/tools/muscle-atlas/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Muscle Atlas">
+<meta property="og:description" content="Learn the muscles of the human body on a 3D model. Study, practice and timed tests by region, with what each muscle does. Free, by SampleSize_1.">
+<meta property="og:url" content="https://samplesize1.com/tools/muscle-atlas/">
+<meta property="og:image" content="https://samplesize1.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<title>Muscle Atlas</title>
+<meta name="description" content="Learn the muscles of the human body on a 3D model. Study, practice and timed tests by region, with what each muscle does. Free, by SampleSize_1.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../atlas-engine/atlas.css">
+<style>
+/* What the Muscle Atlas sets differently from the other atlases (the rest is ../atlas-engine/atlas.css) */
+:root {
+  --miss: #f0a43a;   /* missed muscles in the results: amber, because red would be lost on red muscle */
+  --tip-width: 66ch; --tip-height: 2.9em;   /* Study shows what the muscle does: two lines */
+}
+</style>
+
+<!-- Visible text is English here and is replaced with the chosen language at start-up. data-i18n="key" sets the text,
+     data-i18n-title / -aria / -ph set the tooltip, aria-label and placeholder. The strings live in build/i18n.py. -->
+<div id="stage"><canvas id="c" tabindex="0" aria-label="3D muscles. Drag to rotate, scroll or pinch to zoom, click a muscle to select it." data-i18n-aria="canvas_aria"></canvas></div>
+<svg id="leader" aria-hidden="true"><line id="leaderLine" x1="0" y1="0" x2="0" y2="0"></line><circle id="leaderDot" r="3.5" cx="0" cy="0"></circle></svg>
+<div class="callout" id="callout" hidden></div>
+
+<div class="ui">
+  <div class="brand">
+    <div class="lockup">
+      <!-- the SampleSize_1 logo (the [1] mark), drawn in this tool's blue; links back to the main site -->
+      <a class="home" id="homeLink" href="../../Todologo.html" aria-label="Página de inicio de Todologo" data-i18n-aria="home_aria" title="← Volver al menú de Todologo">
+        <img class="logo-mark" src="../../images/logo-cyan.png" alt="Todologo" style="width:28px;height:28px;object-fit:contain;display:block">
+      </a>
+      <div class="mark" id="toolName">MUSCLE <span>ATLAS</span></div>
+    </div>
+  </div>
+
+  <div class="prompt" id="prompt" aria-live="polite">
+    <div class="eyebrow" id="pEyebrow" data-i18n="loading_eyebrow">Loading</div>
+    <div class="pname" id="pName" data-i18n="loading_name">Muscles</div>
+    <div class="pmeta" id="pMeta">&nbsp;</div>
+    <div class="ptip" id="pTip" hidden></div>
+    <div class="pbar" id="pBarWrap"><i id="pBar"></i></div>
+    <div class="review" id="review" hidden>
+      <div class="legend">
+        <span class="key ok"><i></i><b id="rOk">0</b> <span id="rOkLabel">correct</span></span>
+        <span class="key bad"><i></i><b id="rBad">0</b> <span id="rBadLabel">missed</span></span>
+      </div>
+      <p class="rhint" data-i18n="review_hint">Click any muscle to see its name.</p>
+      <div class="row ractions">
+        <button class="btn primary" id="rAgain" type="button" data-i18n="go_again">Go again</button>
+        <button class="btn" id="rPractice" type="button" data-i18n="practise_misses">Practise the misses</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats" id="stats">
+    <div class="stat"><small data-i18n="stat_acc">Accuracy</small><b id="sAcc">–</b></div>
+    <div class="stat"><small data-i18n="stat_time">Time</small><b id="sTime">0:00</b></div>
+    <div class="stat"><small data-i18n="stat_streak">Streak</small><b id="sStreak">0</b></div>
+  </div>
+
+  <div class="leftcol">
+    <nav class="rail" id="rail" aria-label="Body regions" data-i18n-aria="rail_aria"></nav>
+
+    <!-- One place for everything that changes the viewpoint. Always open on desktop so the 1–0 keys are visible;
+         on phones it is a sheet opened from the View button. -->
+    <section class="viewcard" id="viewCard" aria-label="View" data-i18n-aria="view">
+      <div class="vc-head">
+        <h3 data-i18n="view">View</h3>
+        <div class="vc-head-actions">
+          <button class="voice-btn" id="voiceBtn" type="button" aria-pressed="false" title="Voice commands (V). Say an area, like “left leg”, “back”, “glutes” or “whole body”." data-i18n-title="voice_title"><i></i><span data-i18n="voice">Voice</span></button>
+          <button class="btn close-sheet" id="closeView" type="button" data-i18n="done">Done</button>
+        </div>
+      </div>
+      <p class="voice-heard" id="voiceHeard" aria-live="polite" hidden></p>
+      <div class="vc-sec">
+        <h4 data-i18n="zoom_to">Zoom to</h4>
+        <div class="zp-grid" id="zoomGrid"></div>
+      </div>
+      <div class="vc-sec">
+        <h4 data-i18n="layers">Layers</h4>
+        <div class="seg" id="layerSeg">
+          <button type="button" data-v="1" data-i18n="layer_1" data-i18n-title="layer_1_title">All</button>
+          <button type="button" data-v="2" data-i18n="layer_2" data-i18n-title="layer_2_title">Middle</button>
+          <button type="button" data-v="3" data-i18n="layer_3" data-i18n-title="layer_3_title">Deep</button>
+          <button type="button" data-v="4" data-i18n="layer_4" data-i18n-title="layer_4_title">Deepest</button>
+        </div>
+      </div>
+      <div class="vc-sec">
+        <h4 data-i18n="side">Side</h4>
+        <div class="seg" id="viewSideSeg">
+          <button type="button" data-v="both" data-i18n="both">Both</button>
+          <button type="button" data-v="left" title="The body’s own left" data-i18n="left" data-i18n-title="left_title">Left</button>
+          <button type="button" data-v="right" title="The body’s own right" data-i18n="right" data-i18n-title="right_title">Right</button>
+        </div>
+      </div>
+      <div class="vc-sec">
+        <h4 data-i18n="look_from">Look from</h4>
+        <div class="views">
+          <button class="btn" type="button" data-view="front" data-i18n="front">Front</button>
+          <button class="btn" type="button" data-view="back" data-i18n="back">Back</button>
+          <button class="btn" type="button" data-view="left" title="Look at the body’s left side" data-i18n="look_left" data-i18n-title="look_left_title">Left</button>
+          <button class="btn" type="button" data-view="right" title="Look at the body’s right side" data-i18n="look_right" data-i18n-title="look_right_title">Right</button>
+        </div>
+      </div>
+      <div class="vc-tools">
+        <button class="btn" id="xrayBtn" type="button" aria-pressed="false" title="See through muscles and click ones underneath (X)" data-i18n="xray" data-i18n-title="xray_title">X-ray</button>
+        <button class="btn" id="peelBtn" type="button" aria-pressed="false" title="Click a muscle to hide it and see what is under it. Shift-click does the same." data-i18n="peel" data-i18n-title="peel_title">Peel mode</button>
+        <button class="btn" id="bonesBtn" type="button" aria-pressed="true" title="Show or hide the skeleton under the muscles (B)" data-i18n="bones_btn" data-i18n-title="bones_title">Bones</button>
+        <button class="btn" id="resetBtn" type="button" title="Re-frame the current zoom (R)" data-i18n="reset" data-i18n-title="reset_title">Reset view</button>
+        <button class="btn" id="unhideBtn" type="button" hidden>Show hidden</button>
+      </div>
+      <p class="hint narrow-only" data-i18n="view_hint_narrow">Zoom only moves the camera; the quiz carries on. Layers peel away the outer muscles. X-ray lets you tap muscles underneath. Peel mode hides the muscle you tap.</p>
+    </section>
+  </div>
+
+  <aside class="panel" id="panel" aria-label="Settings" data-i18n-aria="panel_aria">
+    <button class="btn close-sheet" id="closeSheet" type="button" data-i18n="done">Done</button>
+    <section id="langBox">
+      <h3><label for="langSel" data-i18n="lang_title">Language</label></h3>
+      <span class="lang-pick">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.7 2.6 15.3 0 18M12 3c-2.6 2.7-2.6 15.3 0 18"/></svg>
+        <select id="langSel"></select>
+      </span>
+      <p class="hint" id="langNote" style="margin-top:7px" data-i18n="lang_note" hidden></p>
+    </section>
+    <section>
+      <h3 data-i18n="mode">Mode</h3>
+      <div class="seg" id="modeSeg">
+        <button type="button" data-v="study" data-i18n="mode_study">Study</button>
+        <button type="button" data-v="practice" data-i18n="mode_practice">Practice</button>
+        <button type="button" data-v="test" data-i18n="mode_test">Test</button>
+      </div>
+      <p class="hint" id="modeHint" style="margin-top:7px"></p>
+    </section>
+    <section>
+      <h3 data-i18n="bones">Muscles</h3>
+      <div class="seg" id="setSeg">
+        <button type="button" data-v="names" data-i18n="set_names">Main</button>
+        <button type="button" data-v="all" data-i18n="set_all">All</button>
+      </div>
+      <p class="hint" id="setHint" style="margin-top:7px"></p>
+    </section>
+    <section>
+      <h3 data-i18n="hints">Hints</h3>
+      <div class="seg" id="hintSeg">
+        <button type="button" data-v="on" data-i18n="hints_on">Hints on</button>
+        <button type="button" data-v="off" data-i18n="hints_off">Hints off</button>
+      </div>
+      <p class="hint" style="margin-top:7px" id="hintHint"></p>
+    </section>
+    <section id="searchBox" hidden>
+      <h3 data-i18n="find_bone">Find a muscle</h3>
+      <input id="search" type="search" placeholder="e.g. lats, soleus, rotator cuff" data-i18n-ph="search_ph" autocomplete="off">
+      <ul class="results-list" id="searchList"></ul>
+    </section>
+    <section>
+      <div class="best" id="best"></div>
+      <div class="row" style="margin-top:8px">
+        <button class="btn primary" id="restartBtn" type="button" data-i18n="restart">Restart</button>
+        <button class="btn" id="cleanBtn" type="button" data-i18n="clean">Clean view</button>
+      </div>
+      <p class="hint" id="keysHint" style="margin-top:8px"></p>
+    </section>
+    <p class="credit" id="credit">
+      3D model: <a href="https://github.com/Z-Anatomy/The-blend" target="_blank" rel="noopener">Z-Anatomy</a>, based on
+      <a href="https://dbarchive.biosciencedbc.jp/en/bodyparts3d/desc.html" target="_blank" rel="noopener">BodyParts3D</a> © The Database Center for Life Science,
+      <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>. Made by @samplesize_1.
+    </p>
+  </aside>
+
+  <div class="dock">
+    <button class="btn" id="prevBtn" type="button" data-i18n="prev">← Previous</button>
+    <button class="btn" id="nextBtn" type="button" data-i18n="next">Next →</button>
+    <button class="btn" id="skipBtn" type="button">Show me</button>
+    <button class="btn" id="viewBtn" type="button" aria-controls="viewCard">View</button>
+    <button class="btn" id="settingsBtn" type="button" data-i18n="settings">Settings</button>
+    <button class="btn" id="cleanExit" type="button" data-i18n="exit_clean">Exit clean view</button>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<div class="overlay" id="confirm" hidden role="dialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmMsg">
+  <div class="card">
+    <h2 id="confirmTitle" data-i18n="confirm_title">End this test?</h2>
+    <p id="confirmMsg"></p>
+    <div class="row confirm-actions">
+      <button class="btn danger" id="confirmYes" type="button" data-i18n="confirm_yes">End test</button>
+      <button class="btn primary" id="confirmNo" type="button" data-i18n="confirm_no">Keep going</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="loading">
+  <div class="card">
+    <h2>Muscle Atlas</h2>
+    <p id="loadMsg">Loading the 3D muscles…</p>
+    <progress id="loadBar" max="1" value="0"></progress>
+  </div>
+</div>
+
+<!-- Saved progress (scores, settings) for the tools on this site: stays in this browser -->
+<script src="../../js/progress.js"></script>
+
+
+<script>
+/* Language: a ?lang= link wins, then the visitor's own pick (saved in this browser), then the browser's
+   preferred languages, then English. Picked here, before the app runs, so even the loading card is translated. */
+(function () {
+  var BOOT = {"en":{"loading":"Loading the 3D muscles…","start_fail":"Muscle Atlas couldn’t start ({err}). Try reloading. If it keeps happening in this browser only, an extension or privacy setting is probably blocking part of the page.","engine_fail":"The 3D engine didn’t load. A content blocker, DNS filter or strict privacy setting may be blocking this page’s scripts.","webgl_fail":"This browser has 3D graphics (WebGL) switched off or unavailable, so the muscles can’t be drawn. In Firefox, check that webgl.disabled is false in about:config and that hardware acceleration is on.","model_fail":"The muscle model didn’t load. Check your connection and reload the page.","unknown":"unknown error"},"es":{"loading":"Cargando los músculos 3D…","start_fail":"El Atlas Muscular no pudo iniciarse ({err}). Prueba a recargar.","engine_fail":"El motor 3D no se cargó.","webgl_fail":"Este navegador tiene los gráficos 3D (WebGL) desactivados o no disponibles.","model_fail":"El modelo muscular no se cargó.","unknown":"error desconocido"}};
+  var LANGS = Object.keys(BOOT || { en: 1 }), pick = null;   // the languages this page has text for
+  function ok(v) { v = String(v || '').slice(0, 2).toLowerCase(); return LANGS.indexOf(v) >= 0 ? v : null; }
+  try { pick = ok(new URLSearchParams(location.search).get('lang')); } catch (e) { /* no query string */ }
+  // the saved choice: on samplesize1.com it is stored by /js/progress.js as 'ss1.muscle-atlas.lang'; elsewhere as 'muscleatlas.lang'
+  try { if (!pick) pick = ok(localStorage.getItem('todologo.lang')); } catch (e) {}
+  ['ss1.muscle-atlas.lang', 'muscleatlas.lang'].forEach(function (k) {
+    if (!pick) { try { pick = ok(JSON.parse(localStorage.getItem(k))); } catch (e) {} }
+  });
+  window.__atlasLang = pick || 'es';
+  try { localStorage.setItem('todologo.lang', window.__atlasLang); } catch (e) {}
+  // start-up text in the chosen language ({err} is filled in)
+  window.__atlasBoot = function (key, err) {
+    var s = (BOOT && (BOOT[window.__atlasLang] || BOOT.en)[key]) || '';
+    return s.replace('{err}', err || '');
+  };
+  document.documentElement.lang = { en: 'en', fr: 'fr', es: 'es', pt: 'pt-BR', de: 'de' }[window.__atlasLang];
+  var m = document.getElementById('loadMsg');
+  if (m) m.textContent = window.__atlasBoot('loading');
+})();
+
+/* Start-up watchdog (plain script, so it runs even if the 3D code is blocked): if anything stops the app
+   from starting, say what happened on the loading card instead of leaving it spinning. */
+(function () {
+  function say(msg) {
+    var card = document.getElementById('loading'), m = document.getElementById('loadMsg');
+    if (!card || !m || window.__atlas || window.__atlasFatal) return;
+    card.hidden = false; m.textContent = msg;
+  }
+  function onErr(text) {
+    if (window.__atlas || /ResizeObserver/.test(text || '')) return;
+    say(window.__atlasBoot('start_fail', text || window.__atlasBoot('unknown')));
+  }
+  window.addEventListener('error', function (e) { onErr(e.message); });
+  window.addEventListener('unhandledrejection', function (e) { onErr(e.reason && (e.reason.message || String(e.reason))); });
+  setTimeout(function () {
+    if (!window.__atlasStarted) say(window.__atlasBoot('engine_fail'));
+  }, 15000);
+})();
+</script>
+
+<script src="../atlas-engine/bundle.js"></script>
+<script src="data-bundle.js"></script>
+<script src="model-bundle.js"></script>
+<script>
+(function () {
+  var DATA = window.__ATLAS_DATA;
+  var startAtlas = window.Atlas3DEngine.startAtlas;
+  var subIn = window.Atlas3DEngine.subIn;
+  var notIn = window.Atlas3DEngine.notIn;
+  var areaIs = window.Atlas3DEngine.areaIs;
+  var unitIn = window.Atlas3DEngine.unitIn;
+
+// Muscle Atlas is the shared atlas engine (../atlas-engine/atlas.js) with this page's markup, the data in data.js
+// and the settings below. What each setting does is explained in atlas.js, where it is read.
+
+startAtlas({
+  id: 'muscle-atlas',          // progress is saved in this browser under this name
+  savedAs: 'muscleatlas.',    // (where it was saved before the site-wide helper, and still is when this page is opened on its own)
+  data: DATA,
+  model: 'muscles.glb', modelBytes: 4493412,
+
+  colors: { muscle: 0xc0574c },
+  tint: 'muscle',
+  missColors: { flash: 0xffb04d, review: 0xf0a43a },   // amber: red would be lost on red muscle (the page sets --miss to match)
+  pieceMaterial: { roughness: 0.55, envMapIntensity: 0.8 },
+  highlightOpacity: 0.5,
+  pieceFade: { inFront: 0.16 },
+  // The frame here is solid: the skeleton underneath, with its teeth, and the tendons and bands; cartilages and discs are see-through
+  context: {
+    cartilage: { color: 0xa8c7d3, roughness: 0.4, opacity: 0.55 },
+    disc: { color: 0x93b4c1, roughness: 0.45, opacity: 0.6 },
+    tooth: { color: 0xf4f0e8, roughness: 0.3 },
+    bone: { color: 0xd8ccb2, roughness: 0.65, envMapIntensity: 0.8 },
+    tendon: { color: 0xe9e1d2, roughness: 0.4, envMapIntensity: 0.9 },
+  },
+  frameDrawnFirst: false,
+  frameFade: { away: 0.05, xray: 0.25 },
+  frameAlwaysShown: ['tendon'],   // the Bones button hides the skeleton; tendons stay
+  // What a click on a piece of the frame says
+  contextNote: (c, { t, lowerFirst, DATA }) =>
+    c.kind === 'bone' ? t('ctx_bone', { name: lowerFirst(c.extra) })
+    : c.kind === 'tendon' ? DATA.tendonNotes[c.extra]
+    : t({ tooth: 'ctx_tooth', cartilage: 'ctx_cartilage', disc: 'ctx_disc' }[c.kind] || 'ctx_other'),
+  // A click counts only where it lands, and the skeleton, teeth and tendons block it
+  clicks: 'exact',
+  clickableContext: { cartilage: false, disc: false, tooth: true, bone: true, tendon: true },
+  escClearsSelection: false,
+  peekOutsideList: false,    // in Study, a click on a muscle that isn't in the current list does nothing
+  calloutNearSide: false,
+
+  zooms: [
+    { key: 'all', sec: 'all', label: 'Whole body' },
+    { key: 'head', sec: 'head', label: 'Head', lateral: 'sided' },
+    { key: 'neck', sec: 'neck', label: 'Neck' },
+    { key: 'chest', sec: 'torso/chest', label: 'Chest' },
+    { key: 'abs', sec: 'torso', match: subIn('abs', 'pelvicfloor'), label: 'Abdomen' },
+    { key: 'back', sec: 'torso', match: subIn('back', 'deepback'), label: 'Back', dir: 'back' },
+    { key: 'arms', sec: 'arm', match: notIn('hand'), label: 'Arms', one: 'arm' },
+    { key: 'hands', sec: 'arm/hand', label: 'Hands', one: 'hand' },
+    { key: 'legs', sec: 'leg', match: notIn('foot'), label: 'Legs', one: 'leg' },
+    { key: 'feet', sec: 'leg/foot', label: 'Feet', one: 'foot', top: true },
+  ],
+  voiceZooms: [
+    { key: 'face', sec: 'head/face', label: 'Face', parent: 'head' },
+    { key: 'shoulders', sec: 'arm/shoulder', label: 'Shoulders', one: 'shoulder', parent: 'arms' },
+    { key: 'glutes', sec: 'leg/hip', label: 'Glutes', parent: 'legs', dir: 'back' },
+    { key: 'thighs', sec: 'leg/thigh', label: 'Thighs', one: 'thigh', parent: 'legs' },
+    { key: 'calves', sec: 'leg/lowerleg', label: 'Calves', one: 'calf', parent: 'legs', dir: 'back' },
+  ],
+  voiceAreasInViews: false,
+  fitAreasBy: 'spheres',
+  oneSideViews: ['arms', 'hands', 'feet'],   // a muscle's standard view shows these areas one side at a time; the rest whole
+  viewFrom: {
+    // look down on the top of the foot; back muscles from behind
+    sub: { foot: 'top', back: 'back', deepback: 'back' },
+  },
+
+  voiceAreas: {
+    all: ['whole body', 'full body', 'body', 'everything', 'zoom out', 'reset view', 'all muscles'],
+    head: ['head', 'skull', 'jaw'],
+    face: ['face', 'facial muscles'],
+    neck: ['neck', 'throat'],
+    chest: ['chest', 'pec', 'pecs', 'pectoral', 'rib cage', 'ribcage', 'thorax'],
+    abs: ['abs', 'abdomen', 'abdominal', 'stomach', 'belly', 'core', 'six pack', 'sixpack', 'oblique'],
+    back: ['back', 'upper back', 'lower back', 'spine', 'lats', 'traps'],
+    arms: ['arm', 'upper arm', 'forearm', 'bicep', 'tricep'],
+    shoulders: ['shoulder', 'delt', 'deltoid'],
+    hands: ['hand', 'wrist', 'finger', 'palm'],
+    legs: ['leg', 'lower body'],
+    glutes: ['glute', 'butt', 'buttock', 'bum', 'hip'],
+    thighs: ['thigh', 'quad', 'quads', 'hamstring', 'hamstrings'],
+    calves: ['calf', 'calves', 'calve', 'shin', 'lower leg'],
+    feet: ['foot', 'feet', 'toe', 'ankle', 'sole'],
+  },
+  // Sound-alikes trusted only next to "left" / "right": on their own they're ordinary words
+  voiceSidedOnly: { feet: ['food', 'feat'], arms: ['alarm'], legs: ['lag'] },
+
+  noteRows: ['does', 'trained'],
+  noteBreaks: false,
+  layers: 4,
+});
+
+})();
+</script>

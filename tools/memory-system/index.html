@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="es">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0f14">
+<link rel="icon" href="../../images/logo-cyan.png" type="image/png">
+<title>Sistema Mayor de Memoria — Todologo</title>
+<meta name="description" content="Aprende el Código Fonético (0–9), construye tu Casillero Mental (00–99) y memoriza secuencias largas de números convirtiéndolos en imágenes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root {
+  --bg: #0a0f14;
+  --bg-lift: #121b23;
+  --panel: rgba(13, 20, 27, 0.88);
+  --line: #223140;
+  --line-strong: #33475a;
+  --fg: #e8edf0;
+  --muted: #8d9ca9;
+  --bone: #ecdec2;
+  --scan: #6fd0e8;
+  --amber: #f0cf6a;
+  --ok: #5fd39a;
+  --bad: #ff7a6b;
+  --felt: #0d1d25;
+  --felt-edge: #1e4250;
+  --f-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --r: 10px;
+  color-scheme: dark;
+}
+[hidden] { display: none !important; }
+html, body { height: 100%; margin: 0; }
+body {
+  background: radial-gradient(120% 80% at 50% 45%, #121e28 0%, #0d151c 45%, var(--bg) 78%) fixed;
+  color: var(--fg);
+  font-family: var(--f-display);
+  font-size: 14px;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+button { touch-action: manipulation; }
+
+.ui {
+  position: fixed; inset: 0;
+  padding-block: calc(env(safe-area-inset-top, 0px) + 14px) calc(env(safe-area-inset-bottom, 0px) + 14px);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid;
+  grid-template-columns: minmax(268px, 1fr) minmax(0, 740px) minmax(296px, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 12px;
+}
+
+/* ---------- brand ---------- */
+.brand { grid-column: 1; grid-row: 1; align-self: start; justify-self: start; display: grid; gap: 5px; min-width: 0; text-shadow: 0 1px 10px rgba(5, 8, 11, 0.85); }
+.lockup { display: flex; align-items: center; gap: 11px; min-width: 0; }
+.home { display: inline-flex; align-items: center; gap: 5px; color: var(--bone); text-decoration: none; flex: none; border-radius: 7px; padding: 3px 6px 3px 5px; border: 1px solid var(--line-strong); background: rgba(13, 20, 27, 0.78); transition: border-color .15s, background .15s; }
+.home::before { content: "\2190"; font-family: var(--f-mono); font-size: 13px; font-weight: 700; line-height: 1; color: var(--scan); }
+.home:hover { border-color: var(--scan); background: rgba(19, 35, 44, 0.92); }
+.home .logo-mark { height: 28px; width: 28px; object-fit: contain; display: block; transition: filter .15s; filter: drop-shadow(0 1px 5px rgba(5, 8, 11, 0.85)); }
+.home:hover .logo-mark { filter: drop-shadow(0 1px 5px rgba(5, 8, 11, 0.85)) brightness(1.2) drop-shadow(0 0 6px rgba(111, 208, 232, 0.45)); }
+.brand .mark { font-weight: 800; font-stretch: 105%; letter-spacing: -0.01em; font-size: 20px; color: var(--bone); line-height: 1; white-space: nowrap; }
+.brand .mark span { color: var(--scan); }
+.brand .mark sup { font-family: var(--f-mono); font-weight: 600; font-size: 9.5px; letter-spacing: 0.12em; color: var(--muted); border: 1px solid var(--line-strong); border-radius: 4px; padding: 1px 4px; margin-left: 6px; vertical-align: 6px; }
+.brand .sub { color: var(--muted); font-size: 12.5px; }
+@media (max-width: 1440px) { .brand .mark { font-size: 16px; } }
+@media (max-width: 1180px) { .brand .sub { display: none; } }
+
+/* ---------- centre column ---------- */
+.centre { grid-column: 2; grid-row: 1 / 3; min-height: 0; display: flex; flex-direction: column; gap: 10px; }
+.prompt {
+  flex: none; box-sizing: border-box;
+  background: var(--panel); border: 1px solid var(--line-strong); border-radius: var(--r);
+  padding: 12px 18px; display: grid; gap: 4px; text-align: center; position: relative;
+  transition: border-color .15s;
+}
+.prompt::before {
+  content: ""; position: absolute; top: 9px; left: 12px; width: 7px; height: 7px; border-radius: 50%;
+  border: 1.5px solid var(--line-strong);
+}
+.eyebrow { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--scan); }
+.pname { font-weight: 750; font-stretch: 112%; font-size: clamp(20px, 2.3vw, 29px); line-height: 1.14; color: var(--bone); text-wrap: balance; }
+.pmeta { font-family: var(--f-mono); font-size: 11.5px; color: var(--muted); font-variant-numeric: tabular-nums; min-height: 1.3em; }
+.pbar { height: 3px; background: var(--line); border-radius: 2px; overflow: hidden; margin-top: 4px; }
+.pbar i { display: block; height: 100%; width: 0%; background: var(--scan); transition: width .35s ease; }
+.pbar.is-off { visibility: hidden; }
+.prompt.is-ok { border-color: var(--ok); }
+.prompt.is-bad { border-color: var(--bad); }
+.prompt.is-ok .eyebrow { color: var(--ok); }
+.prompt.is-bad .eyebrow { color: var(--bad); }
+
+.stage { flex: 1 1 0; min-height: 0; display: flex; }
+.felt {
+  flex: 1; min-height: 0; overflow: auto; box-sizing: border-box; position: relative;
+  background: radial-gradient(90% 70% at 50% 0%, #122934 0%, var(--felt) 60%, #09141a 100%);
+  border: 1px solid var(--felt-edge); border-radius: 18px;
+  padding: 18px; display: grid; align-content: center; justify-items: center; gap: 14px;
+  scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent;
+}
+.felt.is-top { align-content: start; }
+.stage.flash-ok .felt { border-color: var(--ok); box-shadow: 0 0 0 1px var(--ok); }
+.stage.flash-bad .felt { border-color: var(--bad); box-shadow: 0 0 0 1px var(--bad); }
+
+/* ---------- Memory System Components ---------- */
+.mem-wrap { width: 100%; max-width: 650px; display: grid; gap: 14px; justify-items: center; }
+.rule-banner {
+  width: 100%; box-sizing: border-box;
+  background: rgba(10, 15, 20, 0.58);
+  border: 1px solid var(--line-strong);
+  border-left: 3px solid var(--scan);
+  border-radius: 10px;
+  padding: 12px 15px;
+  color: var(--fg);
+  font-size: 13px;
+  line-height: 1.55;
+}
+.rule-banner b { color: var(--bone); }
+.rule-banner code { font-family: var(--f-mono); font-size: 12px; color: var(--scan); background: rgba(111, 208, 232, 0.1); padding: 1px 5px; border-radius: 4px; }
+
+/* Peg Grid (0-9 or 00-99 slices) */
+.peg-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 8px;
+}
+.peg-card {
+  background: rgba(10, 15, 20, 0.58);
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  padding: 10px 11px;
+  display: grid;
+  gap: 3px;
+}
+.peg-head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 6px;
+}
+.peg-num {
+  font-family: var(--f-mono);
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--scan);
+}
+.peg-cons {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  color: var(--amber);
+}
+.peg-word {
+  font-weight: 750;
+  font-size: 15px;
+  color: var(--bone);
+}
+.peg-word b { color: var(--scan); text-decoration: underline; }
+.peg-hint {
+  font-size: 11.5px;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+/* Big quiz card */
+.quiz-box {
+  background: rgba(10, 15, 20, 0.68);
+  border: 1px solid var(--line-strong);
+  border-radius: 14px;
+  padding: 22px 28px;
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  text-align: center;
+  min-width: 260px;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
+}
+.quiz-big {
+  font-family: var(--f-mono);
+  font-weight: 700;
+  font-size: clamp(32px, 4.5vw, 52px);
+  color: var(--bone);
+  letter-spacing: 0.04em;
+}
+.quiz-sub {
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+/* Interactive Live Number -> Story Converter */
+.converter-box {
+  width: 100%;
+  background: rgba(10, 15, 20, 0.58);
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: grid;
+  gap: 12px;
+  box-sizing: border-box;
+}
+.converter-input {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: var(--f-mono);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--bone);
+  background: #080d12;
+  border: 1.5px solid var(--scan);
+  border-radius: 9px;
+  padding: 10px 14px;
+  letter-spacing: 0.12em;
+  text-align: center;
+}
+.chain-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+}
+.chain-item {
+  background: #101b24;
+  border: 1px solid var(--line-strong);
+  border-radius: 9px;
+  padding: 8px 12px;
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+}
+.chain-item b { font-family: var(--f-mono); font-size: 14px; color: var(--scan); }
+.chain-item span { font-weight: 700; font-size: 14px; color: var(--bone); }
+.chain-arrow { color: var(--muted); font-family: var(--f-mono); }
+
+/* Memory Palace Blueprint & Loci */
+.palace-bar { width: 100%; display: flex; flex-wrap: wrap; gap: 6px; justify-content: space-between; align-items: center; }
+.palace-presets { display: flex; flex-wrap: wrap; gap: 5px; }
+.preset-chip {
+  font: inherit; font-size: 11.5px; font-weight: 600; color: var(--muted);
+  background: rgba(10, 15, 20, 0.62); border: 1px solid var(--line-strong); border-radius: 999px;
+  padding: 4px 10px; cursor: pointer;
+}
+.preset-chip[aria-pressed="true"] { color: var(--fg); border-color: var(--scan); background: rgba(111, 208, 232, 0.12); }
+.palace-map-box {
+  width: 100%; background: rgba(8, 14, 20, 0.72); border: 1px solid var(--line-strong);
+  border-radius: 12px; padding: 10px; box-sizing: border-box;
+}
+.palace-svg { width: 100%; height: auto; display: block; max-height: 255px; }
+.locus-node { cursor: pointer; transition: transform .15s, opacity .15s; transform-box: fill-box; transform-origin: center; }
+.locus-node:hover { opacity: 1; }
+.loci-grid { width: 100%; display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 8px; }
+.loci-card {
+  background: rgba(10, 15, 20, 0.62); border: 1px solid var(--line-strong); border-radius: 10px;
+  padding: 9px 10px; display: grid; gap: 4px; cursor: pointer; transition: border-color .15s, background .15s;
+}
+.loci-card.is-on { border-color: var(--amber); background: rgba(240, 207, 106, 0.08); }
+.loci-head { display: flex; justify-content: space-between; align-items: baseline; gap: 6px; }
+.loci-idx { font-family: var(--f-mono); font-size: 11px; font-weight: 700; color: var(--scan); }
+.loci-room { font-size: 12px; font-weight: 700; color: var(--bone); }
+.loci-item-in {
+  width: 100%; box-sizing: border-box; font: inherit; font-size: 12.5px; color: var(--fg);
+  background: #080e14; border: 1px solid var(--line); border-radius: 6px; padding: 5px 7px;
+}
+.loci-item-in:focus { outline: none; border-color: var(--scan); }
+.loci-scene { font-size: 11.5px; color: var(--muted); line-height: 1.35; }
+
+/* ---------- dock & buttons ---------- */
+.dock { flex: none; display: grid; gap: 8px; justify-items: center; }
+.actions { display: flex; gap: 7px; flex-wrap: wrap; justify-content: center; width: 100%; }
+.actions:empty { display: none; }
+.act {
+  font: inherit; font-weight: 700; font-size: 14.5px; color: var(--fg); cursor: pointer;
+  background: var(--panel); border: 1px solid var(--line-strong); border-radius: 9px; padding: 10px 16px; min-width: 112px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+}
+.act kbd { font-family: var(--f-mono); font-weight: 500; font-size: 10.5px; color: var(--muted); border: 1px solid var(--line-strong); border-radius: 4px; padding: 0 4px; }
+.act:hover:not(:disabled) { border-color: var(--scan); }
+.act:disabled { opacity: .42; cursor: default; }
+.act.primary { background: var(--bone); color: #1b1610; border-color: var(--bone); }
+.act.primary kbd { color: #5d5345; border-color: #a99c84; }
+.act.is-right { border-color: var(--ok); box-shadow: 0 0 0 1px var(--ok); opacity: 1 !important; color: var(--ok); }
+.act.is-wrong { border-color: var(--bad); box-shadow: 0 0 0 1px var(--bad); opacity: 1 !important; color: var(--bad); }
+
+.navrow { display: flex; gap: 6px; justify-content: center; }
+.btn { font: inherit; font-size: 12.5px; font-weight: 600; color: var(--fg); background: var(--bg-lift); border: 1px solid var(--line-strong); border-radius: 7px; padding: 7px 11px; cursor: pointer; }
+.btn:hover { border-color: var(--scan); }
+.btn.primary { background: var(--bone); color: #1b1610; border-color: var(--bone); }
+#settingsBtn, #cleanExit { display: none; }
+
+/* ---------- stats ---------- */
+.stats { grid-column: 3; grid-row: 1; justify-self: end; align-self: start; display: flex; gap: 6px; }
+.stat { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; display: grid; gap: 1px; min-width: 64px; }
+.stat b { font-family: var(--f-mono); font-weight: 600; font-size: 16px; font-variant-numeric: tabular-nums; }
+.stat small { font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+/* ---------- left column ---------- */
+.leftcol { grid-column: 1; grid-row: 2; align-self: start; justify-self: start; width: 256px; max-height: 100%; min-height: 0; display: flex; flex-direction: column; gap: 10px; }
+.rail {
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 10px 8px;
+  display: grid; gap: 2px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent;
+}
+.rail-title { margin: 2px 6px 6px; font-size: 10.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.rail button.item {
+  font: inherit; color: var(--fg); background: transparent; border: 1px solid transparent; border-radius: 7px;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 8px; text-align: left; cursor: pointer;
+  padding: 7px 9px; font-size: 13px; font-weight: 650;
+}
+.rail button.item span i { font-style: normal; font-family: var(--f-mono); font-weight: 500; font-size: 11px; color: var(--muted); margin-right: 6px; }
+.rail button.item em { font-style: normal; font-family: var(--f-mono); font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.rail button.item:hover { background: var(--bg-lift); }
+.rail button.item[aria-pressed="true"] { border-color: var(--scan); background: #13232c; }
+.rail button.item[aria-pressed="true"] em { color: var(--scan); }
+.rail button.item em.done { color: var(--ok); }
+.rail button.item em.done::after { content: " \2713"; }
+.rail button.item em.next { color: var(--bone); }
+.rail .path { margin: 8px 6px 2px; font-size: 12px; line-height: 1.5; color: var(--muted); }
+
+/* ---------- right settings panel ---------- */
+.panel {
+  grid-column: 3; grid-row: 2; justify-self: end; align-self: start;
+  width: 292px; max-height: 100%; overflow-y: auto; box-sizing: border-box;
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--r);
+  padding: 14px; display: grid; gap: 14px;
+  scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent;
+}
+.panel h3 { margin: 0 0 7px; font-size: 10.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.panel section { display: grid; }
+.seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 3px; gap: 3px; }
+.seg button { font: inherit; font-weight: 600; font-size: 13px; color: var(--muted); background: transparent; border: 0; border-radius: 6px; padding: 7px 6px; cursor: pointer; white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: var(--bg-lift); color: var(--fg); box-shadow: inset 0 0 0 1px var(--line-strong); }
+.seg button:hover { color: var(--fg); }
+.row { display: flex; gap: 6px; flex-wrap: wrap; }
+.hint { color: var(--muted); font-size: 12px; line-height: 1.5; margin: 0; }
+.hint kbd { font-family: var(--f-mono); font-size: 11px; border: 1px solid var(--line-strong); border-radius: 4px; padding: 0 4px; color: var(--fg); }
+.best { font-family: var(--f-mono); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.best b { color: var(--bone); font-weight: 600; }
+.credit { font-size: 11px; color: var(--muted); line-height: 1.55; margin: 0; }
+.close-sheet { display: none; justify-self: end; }
+
+/* ---------- overlays ---------- */
+.overlay {
+  position: fixed; inset: 0; display: grid; grid-template-columns: minmax(0, 1fr); place-items: center; z-index: 20;
+  background: rgba(6, 10, 14, 0.65); backdrop-filter: blur(3px);
+  padding-inline: 16px;
+}
+.cardbox { box-sizing: border-box; width: min(540px, 100%); max-height: 86vh; overflow-y: auto; background: var(--bg-lift); border: 1px solid var(--line-strong); border-radius: 14px; padding: 22px; display: grid; gap: 14px; }
+.cardbox h2 { margin: 0; font-weight: 800; font-size: 15px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--scan); }
+.cardbox p, .cardbox ol { margin: 0; color: var(--muted); line-height: 1.55; }
+.cardbox ol { padding-left: 20px; display: grid; gap: 6px; }
+.cardbox b { color: var(--fg); font-weight: 600; }
+.cardbox .row { justify-content: flex-end; }
+
+body.clean .panel, body.clean .leftcol, body.clean .brand .sub, body.clean .stats, body.clean #settingsBtn, body.clean #howBtn { display: none !important; }
+body.clean #cleanExit { display: inline-block; opacity: .55; }
+
+@media (max-width: 900px) {
+  .ui { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto minmax(0, 1fr); gap: 8px; }
+  .brand { grid-column: 1; grid-row: 1; justify-self: center; }
+  .stats { display: none; }
+  .leftcol { grid-column: 1; grid-row: 2; width: 100%; }
+  .rail { width: 100%; overflow-x: auto; display: flex; flex-wrap: nowrap; gap: 5px; padding: 0; background: none; border: 0; }
+  .rail-title, .rail .path { display: none; }
+  .rail button.item { flex: none; background: var(--panel); border-color: var(--line); white-space: nowrap; padding: 6px 10px; }
+  .centre { grid-column: 1; grid-row: 3; }
+  #settingsBtn { display: inline-block; }
+  .panel {
+    position: fixed; left: 0; right: 0; bottom: 0; width: auto; max-height: 76vh; z-index: 15;
+    border-radius: 16px 16px 0 0; background: #0d141b; transform: translateY(105%); transition: transform .25s ease;
+  }
+  body.sheet-open .panel { transform: none; }
+  .panel .close-sheet { display: inline-block; }
+}
+</style>
+
+<div class="ui">
+  <div class="brand">
+    <div class="lockup">
+      <a class="home" id="homeLink" href="../../Todologo.html" aria-label="Página de inicio de Todologo" title="← Volver al menú de Todologo">
+        <img class="logo-mark" src="../../images/logo-cyan.png" alt="Todologo">
+      </a>
+      <div class="mark" id="brandMark">SISTEMA <span>MAYOR</span><sup>T023</sup></div>
+    </div>
+    <div class="sub" id="brandSub">Código fonético 0–9, casillero mental 00–99 y secuencias</div>
+  </div>
+
+  <div class="leftcol">
+    <nav class="rail" id="rail" aria-label="Ejercicios">
+      <div class="rail-title" id="railTitle">Ejercicios, en orden</div>
+      <div id="railList" style="display:contents"></div>
+      <p class="path" id="railPath"></p>
+    </nav>
+  </div>
+
+  <main class="centre">
+    <div class="prompt" id="prompt" aria-live="polite">
+      <div class="eyebrow" id="pEyebrow">Cargando</div>
+      <div class="pname" id="pName">Sistema Mayor de Memoria</div>
+      <div class="pmeta" id="pMeta">&nbsp;</div>
+      <div class="pbar is-off" id="pBarWrap"><i id="pBar"></i></div>
+    </div>
+
+    <div class="stage" id="stageBox">
+      <div class="felt" id="felt"></div>
+    </div>
+
+    <div class="dock">
+      <div class="actions" id="actions"></div>
+      <div class="navrow">
+        <button class="btn" id="settingsBtn" type="button">Ajustes</button>
+        <button class="btn" id="howBtn" type="button">Cómo funciona</button>
+        <button class="btn" id="cleanExit" type="button">Salir de vista limpia</button>
+      </div>
+    </div>
+  </main>
+
+  <div class="stats" id="stats">
+    <div class="stat"><small id="statAccLabel">Precisión</small><b id="sAcc">–</b></div>
+    <div class="stat"><small id="statTimeLabel">Tiempo</small><b id="sTime">0:00</b></div>
+    <div class="stat"><small id="statStreakLabel">Racha</small><b id="sStreak">0</b></div>
+  </div>
+
+  <aside class="panel" id="panel" aria-label="Ajustes">
+    <button class="btn close-sheet" id="closeSheet" type="button">Listo</button>
+    <section>
+      <h3 id="langHeading">Idioma</h3>
+      <select id="langSel" aria-label="Idioma" style="width:100%;font:inherit;font-size:13px;font-weight:600;color:var(--fg);background:var(--bg);border:1px solid var(--line-strong);border-radius:7px;padding:8px 10px;">
+        <option value="es">Español</option>
+        <option value="en">English</option>
+      </select>
+    </section>
+
+    <section>
+      <h3 id="modeHeading">Modo</h3>
+      <div class="seg" id="modeSeg">
+        <button type="button" data-v="study">Estudiar</button>
+        <button type="button" data-v="practice">Practicar</button>
+        <button type="button" data-v="test">Examen</button>
+      </div>
+      <p class="hint" id="modeHint" style="margin-top:7px"></p>
+    </section>
+
+    <section>
+      <h3 id="spanHeading">Longitud de secuencia</h3>
+      <div class="seg" id="spanSeg">
+        <button type="button" data-v="6">6 dígitos</button>
+        <button type="button" data-v="8">8 dígitos</button>
+        <button type="button" data-v="10">10 dígitos</button>
+      </div>
+    </section>
+
+    <section>
+      <div class="best" id="best"></div>
+      <div class="row" style="margin-top:8px">
+        <button class="btn primary" id="restartBtn" type="button">Reiniciar</button>
+        <button class="btn" id="cleanBtn" type="button">Vista limpia</button>
+      </div>
+      <p class="hint" id="keysHint" style="margin-top:8px"></p>
+    </section>
+
+    <p class="credit" id="creditText">
+      El cerebro humano olvida números abstractos en segundos, pero recuerda escenas visuales absurdas durante días. El Sistema Mayor traduce cada par de dígitos en un objeto concreto. Parte de Todologo.
+    </p>
+  </aside>
+</div>
+
+<div class="overlay" id="intro" hidden>
+  <div class="cardbox" role="dialog" aria-modal="true" aria-labelledby="introTitle">
+    <h2 id="introTitle">Cómo funciona el Sistema Mayor</h2>
+    <p id="introBody1">Creado en el siglo XVII por Pierre Hérigone y perfeccionado por los campeones mundiales de memoria:</p>
+    <ol id="introList">
+      <li><b>1. Código de consonantes (0–9):</b> cada dígito se asocia a un sonido consonántico fijo; las vocales (A, E, I, O, U) no tienen valor y sirven solo de puente para formar palabras.</li>
+      <li><b>2. Casillero Mental (00–99):</b> cada número de dos cifras tiene un objeto físico fijo (p. ej. <code>31 = MoTo</code>, <code>74 = FoCa</code>, <code>92 = PiNo</code>).</li>
+      <li><b>3. Historias encadenadas:</b> para recordar <code>317492</code>, imaginas una <b>MoTo</b> conducida por una <b>FoCa</b> que choca contra un <b>PiNo</b>.</li>
+      <li><b>4. Palacio de la Memoria (Loci):</b> recorre mentalmente las habitaciones de un lugar que ya conoces y deposita cada imagen absurdamente en una estación física fija para recordarla en orden exacto.</li>
+    </ol>
+    <div class="row"><button class="btn primary" id="introGo" type="button">Empezar</button></div>
+  </div>
+</div>
+
+<script src="../../js/progress.js"></script>
+<script src="app.js"></script>
+</html>

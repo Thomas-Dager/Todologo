@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Herramientas | Todologo</title>
+  <meta name="description" content="Herramientas interactivas de Todologo para aprender cualquier tema más rápido." />
+  <meta name="theme-color" content="#0E0D0B" />
+  <link rel="icon" href="images/logo-amber.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container inner">
+      <a class="brand" id="nav-home" href="Todologo.html" aria-label="Todologo, inicio">
+        <img class="brand-mark" src="images/logo-amber.png" alt="Todologo" width="30" height="30" />
+        <span class="brand-name">Todologo</span>
+      </a>
+
+      <nav class="main-nav" aria-label="Principal">
+        <ul>
+          <li><button type="button" id="nav-btn-tools" aria-current="page" data-ui="nav_tools">Herramientas</button></li>
+        </ul>
+      </nav>
+
+      <div class="header-right">
+        <div class="lang-switcher" title="Idioma global / Global language">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"></circle>
+            <path d="M3 12h18M12 3c2.6 2.7 2.6 15.3 0 18M12 3c-2.6 2.7-2.6 15.3 0 18"></path>
+          </svg>
+          <select id="global-lang-select" aria-label="Idioma">
+            <option value="es">ESPAÑOL</option>
+            <option value="en">ENGLISH</option>
+            <option value="pt">PORTUGUÊS</option>
+            <option value="fr">FRANÇAIS</option>
+            <option value="de">DEUTSCH</option>
+            <option value="it">ITALIANO</option>
+          </select>
+        </div>
+
+        <p class="status label" aria-hidden="true">
+          Sys // <span class="online" data-ui="sys_online">En línea</span>
+          <span class="status-dot"></span>
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- VIEW 1: CLEAN DIRECTORY (Matches samplesize1.com/tools/) -->
+    <div id="view-catalog" class="view-section active">
+      <section class="container page-header">
+        <p class="label" data-ui="eyebrow">Arsenal // Herramientas</p>
+        <h1 data-ui="page_title">Herramientas</h1>
+        <p class="lede" data-ui="page_lede">
+          Herramientas que construí para aprender más rápido en mis propios experimentos. Libres para que cualquiera las use.
+        </p>
+      </section>
+
+      <nav class="container folders" aria-label="Categorías de herramientas">
+        <ul id="category-tabs">
+          <li>
+            <button type="button" class="cat-tab" data-category="all" aria-current="page">
+              <span data-ui="cat_all">Todas</span> <span class="count" id="count-all">19</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="cat-tab" data-category="Anatomy">
+              <span data-ui="cat_anatomy">Anatomía</span> <span class="count" id="count-anatomy">10</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="cat-tab" data-category="Games">
+              <span data-ui="cat_games">Juegos</span> <span class="count" id="count-games">03</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="cat-tab" data-category="Geography">
+              <span data-ui="cat_geography">Geografía</span> <span class="count" id="count-geography">04</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="cat-tab" data-category="Languages">
+              <span data-ui="cat_languages">Idiomas</span> <span class="count" id="count-languages">01</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="cat-tab" data-category="Machines">
+              <span data-ui="cat_machines">Máquinas</span> <span class="count" id="count-machines">01</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="cat-tab" data-category="Science">
+              <span data-ui="cat_science">Ciencia</span> <span class="count" id="count-science">01</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <section class="container tool-grid" id="tools-grid">
+        <!-- Populated dynamically by app.js -->
+      </section>
+    </div>
+
+    <!-- VIEW 2: INTERNAL TOOL WORKSPACE (For in-page tools not yet extracted to standalone) -->
+    <div id="view-workspace" class="view-section container">
+      <div class="workspace-topbar">
+        <button class="btn-back" id="btn-back-catalog" data-ui="back_to_tools">
+          &larr; VOLVER A HERRAMIENTAS
+        </button>
+        <div class="ws-title-group">
+          <span class="mono-code" id="ws-code">T001</span>
+          <h2 id="ws-title">Atlas Óseo</h2>
+        </div>
+        <div class="ws-mode-switcher" id="ws-mode-switcher">
+          <button class="mode-btn active" data-mode="explore" data-ui="mode_explore">01 // ESTUDIAR</button>
+          <button class="mode-btn" data-mode="drill" data-ui="mode_drill">02 // PRACTICAR</button>
+          <button class="mode-btn" data-mode="quiz" data-ui="mode_quiz">03 // EXAMEN</button>
+        </div>
+      </div>
+
+      <div class="workspace-body" id="workspace-mount"></div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container inner">
+      <div class="id">
+        <a class="brand" href="Todologo.html">
+          <img class="brand-mark" src="images/logo-amber.png" alt="Todologo" width="30" height="30" />
+          <span class="brand-name">Todologo</span>
+        </a>
+        <p class="label" data-ui="footer_tag">n = 1 // Aprendizaje acelerado y experimentación</p>
+      </div>
+      <p class="copy label">&copy; 2026 Todologo</p>
+    </div>
+  </footer>
+
+  <script src="js/progress.js"></script>
+  <script src="js/data/tools-catalog.js"></script>
+  <script src="js/engines/atlas-engine.js"></script>
+  <script src="js/engines/blackjack-engine.js"></script>
+  <script src="js/engines/chess-engine.js"></script>
+  <script src="js/engines/poker-engine.js"></script>
+  <script src="js/engines/mechanical-engine.js"></script>
+  <script src="js/engines/accent-engine.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

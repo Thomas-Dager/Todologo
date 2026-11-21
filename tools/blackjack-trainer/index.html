@@ -1,0 +1,696 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0f14">
+<link rel="icon" href="../../images/logo-cyan.png" type="image/png">
+<link rel="canonical" href="https://samplesize1.com/tools/blackjack-trainer/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Blackjack Trainer">
+<meta property="og:description" content="Learn the two skills of blackjack: perfect basic strategy and card counting. Study the chart, drill every hand, count down a deck against the clock, then put it together at a full table and a bankroll session. Free, by SampleSize_1.">
+<meta property="og:url" content="https://samplesize1.com/tools/blackjack-trainer/">
+<meta property="og:image" content="https://samplesize1.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<title>Blackjack Trainer</title>
+<meta name="description" content="Learn the two skills of blackjack: perfect basic strategy and card counting. Study the chart, drill every hand, count down a deck against the clock, then put it together at a full table and a bankroll session. Free, by SampleSize_1.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Same family look as the atlas tools (Bone Atlas, World Capitals): the prompt card top-centre, the list of
+   drills down the left, settings on the right (a bottom sheet on phones). The middle is a card table. */
+:root {
+  --bg: #0a0f14;
+  --bg-lift: #121b23;
+  --panel: rgba(13, 20, 27, 0.86);
+  --line: #223140;
+  --line-strong: #33475a;
+  --fg: #e8edf0;
+  --muted: #8d9ca9;
+  --bone: #ecdec2;
+  --scan: #6fd0e8;
+  --ok: #5fd39a;
+  --bad: #ff7a6b;
+  --felt: #0d2325;
+  --felt-edge: #1d4645;
+  /* one colour per play, the same on the chart and on the buttons */
+  --hit: #f2906f;
+  --stand: #f0cf6a;
+  --double: #6fd0e8;
+  --split: #74d6a2;
+  --surrender: #bcaaf2;
+  --card: #f6efdf;
+  --card-red: #c5372c;
+  --card-black: #1c1712;
+  --f-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --r: 10px;
+  color-scheme: dark;
+}
+[hidden] { display: none !important; }
+html, body { height: 100%; margin: 0; }
+body {
+  background: radial-gradient(120% 80% at 50% 45%, #121e28 0%, #0d151c 45%, var(--bg) 78%) fixed;
+  color: var(--fg);
+  font-family: var(--f-display);
+  font-size: 14px;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+button { touch-action: manipulation; }
+
+.ui {
+  position: fixed; inset: 0;
+  padding-block: calc(env(safe-area-inset-top, 0px) + 14px) calc(env(safe-area-inset-bottom, 0px) + 14px);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid;
+  grid-template-columns: minmax(272px, 1fr) minmax(0, 720px) minmax(300px, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 12px;
+}
+
+/* ---------- brand ---------- */
+.brand { grid-column: 1; grid-row: 1; align-self: start; justify-self: start; display: grid; gap: 5px; min-width: 0; text-shadow: 0 1px 10px rgba(5, 8, 11, 0.85); }
+.lockup { display: flex; align-items: center; gap: 11px; min-width: 0; }
+.home { display: inline-flex; align-items: center; gap: 5px; color: var(--bone); text-decoration: none; flex: none; border-radius: 7px; padding: 3px 6px 3px 5px; border: 1px solid var(--line-strong); background: rgba(13, 20, 27, 0.78); transition: border-color .15s, background .15s; }
+.home::before { content: "\2190"; font-family: var(--f-mono); font-size: 13px; font-weight: 700; line-height: 1; color: var(--scan); }
+.home:hover { border-color: var(--scan); background: rgba(19, 35, 44, 0.92); }
+.home .logo-mark { height: 21px; width: auto; color: var(--scan); flex: none; transition: filter .15s; filter: drop-shadow(0 1px 5px rgba(5, 8, 11, 0.85)); }
+.home:hover .logo-mark { filter: drop-shadow(0 1px 5px rgba(5, 8, 11, 0.85)) brightness(1.2) drop-shadow(0 0 6px rgba(111, 208, 232, 0.45)); }
+.brand .mark { font-weight: 800; font-stretch: 105%; letter-spacing: -0.01em; font-size: 20px; color: var(--bone); line-height: 1; white-space: nowrap; }
+.brand .mark span { color: var(--scan); }
+.brand .mark sup { font-family: var(--f-mono); font-weight: 600; font-stretch: 100%; font-size: 9.5px; letter-spacing: 0.12em; color: var(--muted); border: 1px solid var(--line-strong); border-radius: 4px; padding: 1px 4px; margin-left: 6px; vertical-align: 6px; }
+.brand .sub { color: var(--muted); font-size: 12.5px; font-stretch: 90%; }
+/* the name has to fit beside the centre column */
+@media (max-width: 1440px) { .brand .mark { font-size: 16px; } .brand .mark sup { margin-left: 4px; vertical-align: 4px; } }
+@media (max-width: 1180px) { .brand .sub { display: none; } }
+
+/* ---------- centre column: prompt, table, buttons ---------- */
+.centre { grid-column: 2; grid-row: 1 / 3; min-height: 0; display: flex; flex-direction: column; gap: 10px; }
+.prompt {
+  flex: none; box-sizing: border-box;
+  background: var(--panel); border: 1px solid var(--line-strong); border-radius: var(--r);
+  padding: 12px 18px; display: grid; gap: 4px; text-align: center; position: relative;
+  transition: border-color .15s;
+}
+.prompt::before {
+  content: ""; position: absolute; top: 9px; left: 12px; width: 7px; height: 7px; border-radius: 50%;
+  border: 1.5px solid var(--line-strong);
+}
+.eyebrow { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--scan); }
+.pname { font-weight: 750; font-stretch: 112%; font-size: clamp(21px, 2.4vw, 30px); line-height: 1.12; color: var(--bone); text-wrap: balance; }
+.pname .vs { color: var(--muted); font-weight: 500; font-stretch: 100%; font-size: .7em; margin-inline: .25em; }
+.pmeta { font-family: var(--f-mono); font-size: 11.5px; color: var(--muted); font-variant-numeric: tabular-nums; min-height: 1.3em; }
+.ptip { font-size: 13px; line-height: 1.5; color: var(--muted); max-width: 64ch; justify-self: center; text-wrap: pretty; margin-top: 2px; }
+.ptip b { color: var(--fg); font-weight: 600; }
+.ptip .good { color: var(--ok); font-weight: 600; }
+.ptip .miss { color: var(--bad); font-weight: 600; }
+.pbar { height: 3px; background: var(--line); border-radius: 2px; overflow: hidden; margin-top: 4px; }
+.pbar i { display: block; height: 100%; width: 0%; background: var(--scan); transition: width .35s ease; }
+.pbar.is-off { visibility: hidden; }
+.prompt.is-ok { border-color: var(--ok); }
+.prompt.is-bad { border-color: var(--bad); }
+.prompt.is-ok .eyebrow { color: var(--ok); }
+.prompt.is-bad .eyebrow { color: var(--bad); }
+/* the number being typed for a count */
+.answerbox { justify-self: center; display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+.answerbox output {
+  min-width: 96px; box-sizing: border-box; padding: 6px 14px; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--bg);
+  font-family: var(--f-mono); font-weight: 600; font-size: 22px; color: var(--fg); font-variant-numeric: tabular-nums;
+}
+.answerbox output:empty::before { content: "?"; color: var(--line-strong); }
+.answerbox.is-active output { border-color: var(--scan); }
+/* how each play does on average: one row per play */
+.evs { justify-self: center; display: grid; grid-template-columns: auto auto; gap: 3px 12px; margin-top: 4px; font-family: var(--f-mono); font-size: 12px; text-align: left; font-variant-numeric: tabular-nums; }
+.evs small { grid-column: 1 / -1; font-family: var(--f-display); font-size: 11.5px; color: var(--muted); text-align: center; margin-bottom: 1px; }
+.evs span { color: var(--muted); }
+.evs b { font-weight: 600; text-align: right; color: var(--fg); }
+.evs .best, .evs .best + b { color: var(--ok); }
+
+.stage { flex: 1 1 0; min-height: 0; display: flex; }
+.felt {
+  flex: 1; min-height: 0; overflow: auto; box-sizing: border-box; position: relative;
+  container-type: size; /* lets the cards size themselves from the table's height (cqh units) */
+  background: radial-gradient(90% 70% at 50% 0%, #123032 0%, var(--felt) 60%, #0a1b1e 100%);
+  border: 1px solid var(--felt-edge); border-radius: 18px;
+  padding: 16px; display: grid; align-content: center; justify-items: center; gap: 14px;
+  scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent;
+}
+.felt.is-top { align-content: start; }
+.stage.flash-ok .felt { border-color: var(--ok); box-shadow: 0 0 0 1px var(--ok); }
+.stage.flash-bad .felt { border-color: var(--bad); box-shadow: 0 0 0 1px var(--bad); }
+.note { color: var(--muted); font-size: 13.5px; line-height: 1.55; max-width: 52ch; text-align: center; margin: 0; text-wrap: pretty; }
+.note b { color: var(--fg); font-weight: 600; }
+.tag { font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+
+/* ---------- playing cards ---------- */
+.card {
+  --w: 72px;
+  width: var(--w); aspect-ratio: 5 / 7; flex: none; position: relative; box-sizing: border-box;
+  border-radius: calc(var(--w) * 0.09); background: var(--card); color: var(--card-black);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset, 0 2px 0 rgba(0, 0, 0, 0.3), 0 8px 18px rgba(0, 0, 0, 0.35);
+  font-weight: 750; font-stretch: 90%; user-select: none;
+}
+.card.red { color: var(--card-red); }
+.card .cr { position: absolute; top: 5%; left: 10%; font-size: calc(var(--w) * 0.34); line-height: 1; letter-spacing: -0.04em; }
+.card .cs { position: absolute; top: calc(5% + var(--w) * 0.36); left: 10%; width: calc(var(--w) * 0.2); height: calc(var(--w) * 0.2); }
+.card .cp { position: absolute; right: 9%; bottom: 7%; width: calc(var(--w) * 0.46); height: calc(var(--w) * 0.46); }
+.card svg { display: block; fill: currentColor; }
+.card.back {
+  background:
+    repeating-linear-gradient(45deg, rgba(111, 208, 232, 0.16) 0 3px, transparent 3px 9px),
+    repeating-linear-gradient(-45deg, rgba(111, 208, 232, 0.16) 0 3px, transparent 3px 9px),
+    #15303a;
+  border: calc(var(--w) * 0.05) solid var(--card);
+}
+.card.in { animation: deal .22s ease-out both; }
+@keyframes deal { from { opacity: 0; transform: translateY(-14px) scale(.96); } }
+.hand { display: flex; justify-content: center; }
+.hand .card + .card { margin-left: calc(var(--w) * -0.42); }
+.hand.spread .card + .card { margin-left: calc(var(--w) * 0.12); }
+
+/* ---------- one hand against the dealer (strategy, deviations) ---------- */
+.duel { display: grid; justify-items: center; gap: 10px; }
+.duel .card { --w: clamp(46px, 19cqh, 104px); }
+.duel .dealer .card { --w: clamp(40px, 16cqh, 88px); }
+/* a smaller pair of hands above the chart in guided practice */
+.duel.small { grid-template-columns: auto auto; gap: 6px 22px; align-items: center; margin-bottom: 10px; }
+.duel.small .tag { display: none; }
+.duel.small .card, .duel.small .dealer .card { --w: 44px; }
+.duel.small .hand .card + .card { margin-left: 5px; }
+.duel .hand .card + .card { margin-left: calc(var(--w) * 0.12); }
+.tcbadge { font-family: var(--f-mono); font-size: 13px; color: var(--muted); border: 1px solid var(--line-strong); border-radius: 999px; padding: 5px 14px; background: rgba(10, 15, 20, 0.5); }
+.tcbadge b { color: var(--bone); font-size: 17px; font-weight: 600; margin-left: 6px; }
+
+/* ---------- strategy chart ---------- */
+.charts { display: grid; gap: 16px; width: 100%; max-width: 620px; }
+.chart { width: 100%; border-collapse: separate; border-spacing: 2px; table-layout: fixed; }
+.chart caption { text-align: left; padding: 0 2px 4px; }
+.chart th { font-family: var(--f-mono); font-weight: 500; font-size: 11.5px; color: var(--muted); padding: 2px 0; }
+.chart th.rowh { text-align: right; padding-right: 6px; width: 58px; color: var(--fg); white-space: nowrap; }
+.chart td { padding: 0; }
+.chart td button {
+  width: 100%; height: clamp(22px, 3.1vh, 30px); display: block; border: 0; border-radius: 4px; cursor: pointer; padding: 0;
+  font-family: var(--f-mono); font-weight: 600; font-size: 12px; color: #10161c; background: var(--c);
+}
+.chart td button:hover { filter: brightness(1.15); }
+.chart td button[aria-pressed="true"] { outline: 2px solid var(--fg); outline-offset: 1px; }
+.chart td button.is-miss { box-shadow: inset 0 0 0 2px #10161c, 0 0 0 2px var(--bad); }
+.chart td button.is-dim { opacity: .28; }
+.a-H { --c: var(--hit); } .a-S { --c: var(--stand); } .a-D { --c: var(--double); } .a-P { --c: var(--split); } .a-R { --c: var(--surrender); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; justify-content: center; font-size: 12.5px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 18px; height: 18px; border-radius: 4px; background: var(--c); color: #10161c; font-family: var(--f-mono); font-style: normal; font-weight: 600; font-size: 10.5px; display: grid; place-items: center; }
+
+/* ---------- card values ---------- */
+.values { display: grid; grid-template-columns: repeat(5, auto); gap: 14px 12px; justify-content: center; }
+.values figure { margin: 0; display: grid; justify-items: center; gap: 6px; }
+.values .card { --w: min(clamp(40px, 13cqh, 64px), 13.5cqw); }
+.values figcaption, .tagval { font-family: var(--f-mono); font-weight: 600; font-size: 15px; font-variant-numeric: tabular-nums; }
+.plus { color: var(--ok); } .minus { color: var(--bad); } .zero { color: var(--muted); }
+.flash { display: flex; gap: 12px; justify-content: center; align-items: center; min-height: min(236px, 62cqh); cursor: pointer; }
+.flash .card { --w: min(clamp(70px, 42cqh, 160px), 40cqw); }
+.flash.g2 .card { --w: min(clamp(64px, 38cqh, 140px), 38cqw); }
+.flash.g3 .card { --w: min(clamp(56px, 32cqh, 120px), 27cqw); }
+.bigcount { font-family: var(--f-mono); font-weight: 600; font-size: clamp(34px, 7vh, 56px); color: var(--bone); font-variant-numeric: tabular-nums; line-height: 1; }
+.livecount { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.chip { background: rgba(10, 15, 20, 0.55); border: 1px solid var(--line-strong); border-radius: 8px; padding: 6px 12px; display: grid; gap: 1px; min-width: 76px; text-align: center; }
+.chip b { font-family: var(--f-mono); font-weight: 600; font-size: 17px; font-variant-numeric: tabular-nums; color: var(--bone); }
+.chip small { font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.chip i { font-style: normal; font-family: var(--f-mono); font-size: 11px; font-variant-numeric: tabular-nums; }
+/* bankroll over a session */
+.spark { width: 100%; max-width: 560px; display: grid; gap: 4px; }
+.spark svg { width: 100%; height: 110px; display: block; overflow: visible; }
+.spark polyline { fill: none; stroke-width: 2; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.spark polyline.up { stroke: var(--ok); } .spark polyline.down { stroke: var(--bad); }
+.spark line.base { stroke: var(--line-strong); stroke-dasharray: 4 4; vector-effect: non-scaling-stroke; }
+.sparkcap { display: flex; justify-content: space-between; font-family: var(--f-mono); font-size: 11px; color: var(--muted); }
+.devs td small { color: var(--muted); font-weight: 500; }
+/* every card of a round laid out with the count after each one */
+.strip { display: flex; flex-wrap: wrap; gap: 10px 6px; justify-content: center; max-width: 640px; }
+.strip figure { margin: 0; display: grid; justify-items: center; gap: 3px; }
+.strip .card { --w: clamp(30px, 6cqw, 44px); box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35); }
+.strip .card .cp { display: none; }
+.strip .card .cr { font-size: calc(var(--w) * 0.44); top: 8%; }
+.strip .card .cs { top: calc(8% + var(--w) * 0.5); width: calc(var(--w) * 0.34); height: calc(var(--w) * 0.34); }
+.strip figcaption { font-family: var(--f-mono); font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.strip figure.is-now .card { outline: 2px solid var(--scan); outline-offset: 2px; }
+.strip figure.is-now figcaption { color: var(--scan); }
+
+/* ---------- discard tray (true count) ---------- */
+.trayrow { display: flex; gap: 28px; align-items: center; justify-content: center; flex-wrap: wrap; }
+.tray { position: relative; width: 92px; height: var(--h, 190px); box-sizing: content-box; border: 2px solid rgba(232, 237, 240, 0.34); border-top: 0; border-radius: 0 0 8px 8px; background: rgba(232, 237, 240, 0.04); }
+.tray .stack {
+  position: absolute; left: 5px; right: 5px; bottom: 4px; height: var(--fill, 0%); border-radius: 2px;
+  background: repeating-linear-gradient(180deg, #efe6d2 0 1.5px, #b9ae95 1.5px 2.5px);
+  box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
+}
+.tray .ticks { position: absolute; inset: 0 auto 4px 100%; width: 34px; pointer-events: none; }
+.tray .ticks span { position: absolute; left: 4px; transform: translateY(50%); font-family: var(--f-mono); font-size: 10px; color: var(--muted); padding-left: 10px; white-space: nowrap; }
+.tray .ticks span::before { content: ""; position: absolute; left: 0; top: 50%; width: 7px; height: 1px; background: var(--muted); }
+.traycap { font-family: var(--f-mono); font-size: 11px; color: var(--muted); text-align: center; margin-top: 8px; }
+.trayside { display: grid; justify-items: center; gap: 10px; }
+
+/* ---------- index plays (deviations) ---------- */
+.devs { width: 100%; max-width: 560px; border-collapse: collapse; font-size: 13px; }
+.devs th { font-family: var(--f-mono); font-weight: 500; font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-align: left; padding: 4px 8px; }
+.devs td { padding: 6px 8px; border-top: 1px solid rgba(232, 237, 240, 0.09); }
+.devs td:first-child { font-weight: 650; color: var(--bone); white-space: nowrap; }
+.devs td.ix { font-family: var(--f-mono); font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.devs tr.grp td { border: 0; padding-top: 14px; font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--scan); font-weight: 500; }
+
+/* ---------- full table ---------- */
+.table { width: 100%; height: 100%; min-height: 0; display: grid; grid-template-rows: auto auto 1fr auto; gap: 8px; justify-items: center; align-items: center; position: relative; }
+.table .seatlabel { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); text-align: center; }
+.table .dealerbox { display: grid; gap: 5px; justify-items: center; min-height: calc(var(--dw) * 1.4 + 18px); }
+.table .dealerbox .card { --w: var(--dw); }
+.table { --dw: clamp(32px, 12.5cqh, 62px); --ow: clamp(24px, 9cqh, 46px); --yw: clamp(38px, 16cqh, 80px); }
+.others { display: flex; gap: 18px; justify-content: center; align-items: start; flex-wrap: wrap; min-height: calc(var(--ow) * 1.4 + 34px); }
+.seat { display: grid; gap: 4px; justify-items: center; }
+.seat .card { --w: var(--ow); box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35); }
+.seat .hands { display: flex; gap: 8px; }
+.you { display: grid; gap: 6px; justify-items: center; align-self: end; }
+.you .hands { display: flex; gap: 16px; justify-content: center; }
+.you .card { --w: var(--yw); }
+.handbox { display: grid; gap: 4px; justify-items: center; padding: 4px 6px; border-radius: 10px; border: 1px solid transparent; }
+.handbox.is-turn { border-color: var(--scan); background: rgba(111, 208, 232, 0.06); }
+.handbox .res { font-family: var(--f-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; min-height: 1.2em; color: var(--muted); }
+.handbox .res.win { color: var(--ok); } .handbox .res.lose { color: var(--bad); }
+.handbox .hand .card.side { transform: rotate(90deg); margin-left: calc(var(--w) * -0.1); margin-right: calc(var(--w) * 0.2); }
+.handbox .hand.spread .card.side { margin-left: calc(var(--w) * 0.34); }
+.table .minitray { position: absolute; right: 2px; top: 0; display: grid; justify-items: center; gap: 4px; }
+.table .minitray .tray { width: 34px; border-width: 1.5px; }
+.table .minitray .tray .stack { left: 3px; right: 3px; bottom: 3px; }
+.table .minitray .tray .ticks { display: none; }
+.table .livecount { position: absolute; left: 0; top: 0; display: grid; gap: 6px; justify-content: start; }
+.table .livecount .chip { min-width: 62px; padding: 4px 8px; }
+.table .livecount .chip b { font-size: 15px; }
+
+/* ---------- buttons under the table ---------- */
+.dock { flex: none; display: grid; gap: 8px; justify-items: center; }
+.actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; width: 100%; }
+.actions:empty { display: none; }
+.act {
+  font: inherit; font-weight: 700; font-stretch: 105%; font-size: 15px; color: var(--fg); cursor: pointer;
+  background: var(--panel); border: 1px solid var(--line-strong); border-radius: 9px; padding: 11px 16px; min-width: 92px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; position: relative;
+}
+.act kbd { font-family: var(--f-mono); font-weight: 500; font-size: 10.5px; color: var(--muted); border: 1px solid var(--line-strong); border-radius: 4px; padding: 0 4px; }
+.act[data-c] { border-bottom: 3px solid var(--c); padding-bottom: 9px; }
+.act:hover:not(:disabled) { border-color: var(--scan); }
+.act[data-c]:hover:not(:disabled) { border-color: var(--c); }
+.act:disabled { opacity: .32; cursor: default; }
+.act.primary { background: var(--bone); color: #1b1610; border-color: var(--bone); }
+.act.primary kbd { color: #5d5345; border-color: #a99c84; }
+.act.is-right { border-color: var(--ok); box-shadow: 0 0 0 1px var(--ok); opacity: 1; }
+.act.is-wrong { border-color: var(--bad); box-shadow: 0 0 0 1px var(--bad); opacity: 1; }
+.act.wide { min-width: 0; padding-inline: 13px; font-size: 14px; }
+.act small { font-family: var(--f-mono); font-weight: 500; font-size: 10.5px; color: var(--muted); }
+.act.primary small { color: #5d5345; }
+.act.bet { flex-direction: column; gap: 2px; padding: 8px 14px; min-width: 84px; font-family: var(--f-mono); font-size: 16px; }
+.act.bet.primary { box-shadow: 0 0 0 1px var(--bone); }
+.keypad { display: grid; grid-template-columns: repeat(6, minmax(0, 54px)); gap: 5px; justify-content: center; }
+.keypad button {
+  font-family: var(--f-mono); font-weight: 600; font-size: 17px; color: var(--fg); cursor: pointer;
+  background: var(--panel); border: 1px solid var(--line-strong); border-radius: 8px; height: 42px; padding: 0;
+}
+.keypad button:hover { border-color: var(--scan); }
+.keypad .go { grid-column: span 2; background: var(--bone); color: #1b1610; border-color: var(--bone); font-family: var(--f-display); font-weight: 700; font-size: 14px; }
+.navrow { display: flex; gap: 6px; justify-content: center; }
+.btn { font: inherit; font-size: 12.5px; font-weight: 600; color: var(--fg); background: var(--bg-lift); border: 1px solid var(--line-strong); border-radius: 7px; padding: 7px 10px; cursor: pointer; }
+.btn:hover { border-color: var(--scan); }
+.btn.primary { background: var(--bone); color: #1b1610; border-color: var(--bone); }
+.btn.primary:hover { filter: brightness(1.05); }
+.btn:disabled { opacity: .45; cursor: default; }
+#settingsBtn, #cleanExit { display: none; }
+
+/* ---------- stats ---------- */
+.stats { grid-column: 3; grid-row: 1; justify-self: end; align-self: start; display: flex; gap: 6px; }
+.stat { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; display: grid; gap: 1px; min-width: 64px; }
+.stat b { font-family: var(--f-mono); font-weight: 600; font-size: 16px; font-variant-numeric: tabular-nums; }
+.stat small { font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+/* ---------- left column: the two skills and their drills ---------- */
+.leftcol { grid-column: 1; grid-row: 2; align-self: start; justify-self: start; width: 248px; max-height: 100%; min-height: 0; display: flex; flex-direction: column; gap: 10px; }
+.rail {
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 10px 8px;
+  display: grid; gap: 2px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent;
+}
+.rail-title { margin: 2px 6px 6px; font-size: 10.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.rail .seg { margin-bottom: 8px; }
+.rail button.item {
+  font: inherit; color: var(--fg); background: transparent; border: 1px solid transparent; border-radius: 7px;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 10px; text-align: left; cursor: pointer;
+  padding: 7px 9px; font-size: 13.5px; font-weight: 650;
+}
+.rail button.item em { font-style: normal; font-family: var(--f-mono); font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.rail button.item:hover { background: var(--bg-lift); }
+.rail button.item[aria-pressed="true"] { border-color: var(--scan); background: #13232c; }
+.rail button.item[aria-pressed="true"] em { color: var(--scan); }
+.rail button.item em.done { color: var(--ok); }
+.rail button.item em.done::after { content: " \2713"; }
+.rail .path { margin: 8px 6px 2px; font-size: 12px; line-height: 1.5; color: var(--muted); }
+
+/* ---------- settings panel ---------- */
+.panel {
+  grid-column: 3; grid-row: 2; justify-self: end; align-self: start;
+  width: 292px; max-height: 100%; overflow-y: auto; box-sizing: border-box;
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--r);
+  padding: 14px; display: grid; gap: 16px;
+  scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent;
+}
+.panel h3 { margin: 0 0 7px; font-size: 10.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.panel section { display: grid; }
+.panel .field + .field { margin-top: 10px; }
+.panel label.lab { display: block; font-size: 12px; color: var(--muted); margin-bottom: 5px; }
+.seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 3px; gap: 3px; }
+.seg button { font: inherit; font-weight: 600; font-size: 13px; color: var(--muted); background: transparent; border: 0; border-radius: 6px; padding: 7px 6px; cursor: pointer; white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: var(--bg-lift); color: var(--fg); box-shadow: inset 0 0 0 1px var(--line-strong); }
+.seg button:hover { color: var(--fg); }
+.panel select {
+  width: 100%; font: inherit; font-size: 13px; font-weight: 600; color: var(--fg); background: var(--bg); border: 1px solid var(--line-strong); border-radius: 7px; padding: 8px 10px;
+}
+.row { display: flex; gap: 6px; flex-wrap: wrap; }
+.hint { color: var(--muted); font-size: 12px; line-height: 1.5; margin: 0; }
+.hint kbd { font-family: var(--f-mono); font-size: 11px; border: 1px solid var(--line-strong); border-radius: 4px; padding: 0 4px; color: var(--fg); }
+.best { font-family: var(--f-mono); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.best b { color: var(--bone); font-weight: 600; }
+.credit { font-size: 11px; color: var(--muted); line-height: 1.55; margin: 0; }
+.credit a { color: var(--muted); text-underline-offset: 2px; }
+.credit a:hover { color: var(--fg); }
+.close-sheet { display: none; justify-self: end; }
+
+/* ---------- toast ---------- */
+.toast {
+  position: fixed; left: 50%; transform: translateX(-50%); top: calc(env(safe-area-inset-top, 0px) + 150px);
+  background: #0d141b; border: 1px solid var(--line-strong); border-radius: 999px;
+  padding: 8px 16px; font-size: 13.5px; max-width: min(560px, calc(100% - 32px)); text-align: center; box-sizing: border-box;
+  opacity: 0; transition: opacity .2s ease; pointer-events: none; z-index: 12;
+}
+.toast.show { opacity: 1; }
+.toast.bad { border-color: var(--bad); }
+.toast.ok { border-color: var(--ok); }
+
+/* ---------- overlays ---------- */
+.overlay {
+  position: fixed; inset: 0; display: grid; grid-template-columns: minmax(0, 1fr); place-items: center; z-index: 20;
+  background: rgba(6, 10, 14, 0.62); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.cardbox { box-sizing: border-box; width: min(520px, 100%); max-height: 86vh; overflow-y: auto; background: var(--bg-lift); border: 1px solid var(--line-strong); border-radius: 14px; padding: 22px; display: grid; gap: 14px; }
+.cardbox h2 { margin: 0; font-weight: 800; font-stretch: 118%; font-size: 15px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--scan); }
+.cardbox p { margin: 0; color: var(--muted); line-height: 1.55; }
+.cardbox p b { color: var(--fg); font-weight: 600; }
+.cardbox ol { margin: 0; padding-left: 20px; color: var(--muted); line-height: 1.6; display: grid; gap: 6px; }
+.cardbox ol b { color: var(--fg); font-weight: 600; }
+.cardbox .row { justify-content: flex-end; }
+.cardbox .btn { padding: 9px 16px; font-size: 13px; }
+
+/* ---------- clean recording view ---------- */
+body.clean .panel, body.clean .leftcol, body.clean .brand .sub, body.clean .stats, body.clean #settingsBtn, body.clean #howBtn { display: none !important; }
+body.clean #cleanExit { display: inline-block; opacity: .55; }
+
+:focus-visible { outline: 2px solid var(--scan); outline-offset: 2px; }
+
+/* ---------- phones / narrow ---------- */
+@media (max-width: 900px) {
+  .ui { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto minmax(0, 1fr); gap: 8px; padding-block: calc(env(safe-area-inset-top, 0px) + 10px) calc(env(safe-area-inset-bottom, 0px) + 10px); }
+  .brand { grid-column: 1; grid-row: 1; justify-self: center; }
+  .lockup { gap: 9px; }
+  .home .logo-mark { height: 16px; }
+  .brand .mark sup { display: inline; }
+  .brand .mark { font-size: 15px; }
+  .stats { display: none; }
+  /* the skills and drills become one scrolling row */
+  .leftcol { grid-column: 1; grid-row: 2; width: 100%; }
+  .rail {
+    width: 100%; box-sizing: border-box; overflow-x: auto; overflow-y: hidden; display: flex; flex-wrap: nowrap; align-items: center; gap: 5px;
+    padding: 0; background: none; border: 0; scrollbar-width: none;
+  }
+  .rail::-webkit-scrollbar { display: none; }
+  .rail-title, .rail .path { display: none; }
+  .rail .seg { margin: 0 4px 0 0; flex: none; }
+  .rail .seg button { padding: 6px 10px; }
+  .rail button.item { flex: none; background: var(--panel); border-color: var(--line); white-space: nowrap; padding: 6px 10px; font-size: 13px; }
+  .rail button.item em { display: none; }
+  .centre { grid-column: 1; grid-row: 3; gap: 8px; }
+  .prompt { padding: 9px 14px; }
+  .pname { font-size: clamp(19px, 5.6vw, 25px); }
+  .ptip { font-size: 12.5px; }
+  .felt { padding: 12px 10px; border-radius: 14px; }
+  .chart { border-spacing: 1.5px; }
+  .chart th.rowh { width: 44px; padding-right: 4px; font-size: 11px; }
+  .chart td button { font-size: 11px; height: 25px; border-radius: 3px; }
+  .act { flex: 1 1 28%; min-width: 0; padding: 13px 8px; font-size: 15px; }
+  .act kbd { display: none; }
+  .act.bet { flex: 1 1 18%; min-width: 0; padding: 8px 4px; font-size: 14px; }
+  .act.bet small { font-size: 10px; }
+  .keypad { grid-template-columns: repeat(6, minmax(0, 1fr)); width: 100%; }
+  .keypad button { height: 44px; }
+  #settingsBtn { display: inline-block; }
+  .navrow .btn { padding: 8px 14px; }
+  .panel {
+    position: fixed; left: 0; right: 0; bottom: 0; width: auto; max-height: 76vh; overflow-y: auto; z-index: 15;
+    border-radius: 16px 16px 0 0; border-bottom: 0; background: #0d141b;
+    padding-block: 16px calc(env(safe-area-inset-bottom, 0px) + 16px);
+    padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+    transform: translateY(105%); transition: transform .25s ease;
+  }
+  body.sheet-open .panel { transform: none; }
+  .panel .close-sheet { display: inline-block; }
+  .toast { top: calc(env(safe-area-inset-top, 0px) + 120px); }
+  .table .livecount .chip { min-width: 50px; padding: 3px 6px; }
+  .table .livecount .chip b { font-size: 13px; }
+  .others { gap: 10px; }
+  .trayrow { gap: 18px; }
+}
+@media (max-width: 900px) and (max-height: 640px) {
+  .brand { display: none; }
+  .ptip { font-size: 12px; line-height: 1.4; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<!-- the four suits, drawn once and reused on every card -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="suit-s" viewBox="0 0 24 24"><path d="M12 1.5C8.6 6.6 2.8 9.6 2.8 14.4c0 2.6 2 4.5 4.5 4.5 1.4 0 2.7-.6 3.6-1.7-.2 2.1-.9 3.8-2.4 5.3h7c-1.5-1.5-2.2-3.2-2.4-5.3.9 1.1 2.2 1.7 3.6 1.7 2.5 0 4.5-1.9 4.5-4.5 0-4.8-5.8-7.8-9.2-12.9z"/></symbol>
+  <symbol id="suit-h" viewBox="0 0 24 24"><path d="M12 21.8C4.9 15.6 2 12 2 8.1 2 5.1 4.3 2.8 7.1 2.8c1.9 0 3.7 1 4.9 2.9 1.2-1.9 3-2.9 4.9-2.9C19.7 2.8 22 5.1 22 8.1c0 3.9-2.9 7.5-10 13.7z"/></symbol>
+  <symbol id="suit-d" viewBox="0 0 24 24"><path d="M12 1.5 20.6 12 12 22.5 3.4 12z"/></symbol>
+  <symbol id="suit-c" viewBox="0 0 24 24"><path d="M12 1.6a4.6 4.6 0 0 0-4 6.9 4.6 4.6 0 1 0 2.9 7.9c-.2 2.4-.9 4.3-2.4 6.1h7c-1.5-1.8-2.2-3.7-2.4-6.1a4.6 4.6 0 1 0 2.9-7.9 4.6 4.6 0 0 0-4-6.9z"/></symbol>
+</svg>
+
+<div class="ui">
+  <div class="brand">
+    <div class="lockup">
+      <!-- the SampleSize_1 logo (the [1] mark), drawn in this tool's blue; links back to the main site -->
+      <a class="home" id="homeLink" href="../../Todologo.html" aria-label="Página de inicio de Todologo" title="← Volver al menú de Todologo">
+        <img class="logo-mark" src="../../images/logo-cyan.png" alt="Todologo" style="width:28px;height:28px;object-fit:contain;display:block">
+      </a>
+      <div class="mark">BLACKJACK <span>TRAINER</span><sup>BETA</sup></div>
+    </div>
+    <div class="sub">Perfect play, then card counting</div>
+  </div>
+
+  <div class="leftcol">
+    <nav class="rail" id="rail" aria-label="Skills and drills">
+      <div class="seg" id="skillSeg">
+        <button type="button" data-v="strategy">Strategy</button>
+        <button type="button" data-v="counting">Counting</button>
+      </div>
+      <div id="railList" style="display:contents"></div>
+      <p class="path" id="railPath"></p>
+    </nav>
+  </div>
+
+  <main class="centre">
+    <div class="prompt" id="prompt" aria-live="polite">
+      <div class="eyebrow" id="pEyebrow">Loading</div>
+      <div class="pname" id="pName">Blackjack Trainer</div>
+      <div class="pmeta" id="pMeta">&nbsp;</div>
+      <div class="pbar is-off" id="pBarWrap"><i id="pBar"></i></div>
+      <div class="answerbox" id="answerBox" hidden><output id="answerOut" aria-label="Your answer"></output></div>
+      <div class="evs" id="pEvs" hidden></div>
+      <div class="ptip" id="pTip" hidden></div>
+    </div>
+
+    <div class="stage" id="stageBox"><div class="felt" id="felt"></div></div>
+
+    <div class="dock">
+      <div class="actions" id="actions"></div>
+      <div class="keypad" id="keypad" hidden>
+        <button type="button" data-k="1">1</button><button type="button" data-k="2">2</button><button type="button" data-k="3">3</button>
+        <button type="button" data-k="4">4</button><button type="button" data-k="5">5</button><button type="button" data-k="sign" aria-label="Plus or minus">±</button>
+        <button type="button" data-k="6">6</button><button type="button" data-k="7">7</button><button type="button" data-k="8">8</button>
+        <button type="button" data-k="9">9</button><button type="button" data-k="0">0</button><button type="button" data-k="back" aria-label="Delete">⌫</button>
+        <button type="button" class="go" data-k="enter" style="grid-column: 1 / -1">Enter</button>
+      </div>
+      <div class="navrow">
+        <button class="btn" id="settingsBtn" type="button">Settings</button>
+        <button class="btn" id="howBtn" type="button">How it works</button>
+        <button class="btn" id="cleanExit" type="button">Exit clean view</button>
+      </div>
+    </div>
+  </main>
+
+  <div class="stats" id="stats">
+    <div class="stat"><small>Accuracy</small><b id="sAcc">–</b></div>
+    <div class="stat"><small>Time</small><b id="sTime">0:00</b></div>
+    <div class="stat"><small>Streak</small><b id="sStreak">0</b></div>
+  </div>
+
+  <aside class="panel" id="panel" aria-label="Settings">
+    <button class="btn close-sheet" id="closeSheet" type="button">Listo</button>
+    <section>
+      <h3 id="langLabel">Idioma</h3>
+      <select id="langSel" aria-label="Idioma">
+        <option value="es">Español</option>
+        <option value="en">English</option>
+      </select>
+    </section>
+    <section>
+      <h3 id="modeHeading">Modo</h3>
+      <div class="seg" id="modeSeg">
+        <button type="button" data-v="study">Study</button>
+        <button type="button" data-v="practice">Practice</button>
+        <button type="button" data-v="test">Test</button>
+      </div>
+      <p class="hint" id="modeHint" style="margin-top:7px"></p>
+    </section>
+
+    <section id="systemBox">
+      <h3>Counting system</h3>
+      <select id="systemSel" aria-label="Counting system"></select>
+      <p class="hint" id="systemHint" style="margin-top:7px"></p>
+    </section>
+
+    <section id="drillBox">
+      <h3 id="drillTitle">Drill</h3>
+      <div class="field" id="groupField">
+        <label class="lab">Cards at a time</label>
+        <div class="seg" id="groupSeg">
+          <button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button>
+        </div>
+      </div>
+      <div class="field" id="speedField">
+        <label class="lab">Speed</label>
+        <div class="seg" id="speedSeg">
+          <button type="button" data-v="2">Slow</button><button type="button" data-v="1.2">Medium</button><button type="button" data-v="0.7">Fast</button><button type="button" data-v="0.4">Casino</button>
+        </div>
+      </div>
+      <div class="field" id="lenField">
+        <label class="lab">Cards per round</label>
+        <div class="seg" id="lenSeg">
+          <button type="button" data-v="10">10</button><button type="button" data-v="20">20</button><button type="button" data-v="30">30</button><button type="button" data-v="52">52</button>
+        </div>
+      </div>
+      <div class="field" id="levelField">
+        <label class="lab">Difficulty</label>
+        <div class="seg" id="levelSeg">
+          <button type="button" data-v="easy">Easy</button><button type="button" data-v="hard">Hard</button>
+        </div>
+      </div>
+      <div class="field" id="othersField">
+        <label class="lab">Other players at the table</label>
+        <div class="seg" id="othersSeg">
+          <button type="button" data-v="0">0</button><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button>
+        </div>
+      </div>
+      <div class="field" id="dealField">
+        <label class="lab">Dealing speed</label>
+        <div class="seg" id="dealSeg">
+          <button type="button" data-v="650">Slow</button><button type="button" data-v="400">Medium</button><button type="button" data-v="220">Fast</button>
+        </div>
+      </div>
+      <div class="field" id="indexField">
+        <label class="lab">Index plays (Illustrious 18, Fab 4)</label>
+        <div class="seg" id="indexSeg">
+          <button type="button" data-v="0">Basic strategy only</button><button type="button" data-v="1">On</button>
+        </div>
+      </div>
+      <div class="field" id="unitField">
+        <label class="lab">One unit</label>
+        <div class="seg" id="unitSeg">
+          <button type="button" data-v="5">$5</button><button type="button" data-v="10">$10</button><button type="button" data-v="25">$25</button><button type="button" data-v="100">$100</button>
+        </div>
+      </div>
+      <div class="field" id="bankField">
+        <label class="lab">Bankroll, in units</label>
+        <div class="seg" id="bankSeg">
+          <button type="button" data-v="100">100</button><button type="button" data-v="200">200</button><button type="button" data-v="500">500</button><button type="button" data-v="1000">1000</button>
+        </div>
+      </div>
+      <div class="field" id="peekField">
+        <label class="lab">Chart while practising</label>
+        <div class="seg" id="peekSeg">
+          <button type="button" data-v="0">Hidden</button><button type="button" data-v="1">Shown</button>
+        </div>
+      </div>
+      <p class="hint" id="drillHint" style="margin-top:8px"></p>
+    </section>
+
+    <section id="rulesBox">
+      <h3>Table rules</h3>
+      <div class="field">
+        <label class="lab">Decks in the shoe</label>
+        <div class="seg" id="decksSeg">
+          <button type="button" data-v="2">2</button><button type="button" data-v="6">6</button><button type="button" data-v="8">8</button>
+        </div>
+      </div>
+      <div class="field">
+        <label class="lab">Dealer on soft 17</label>
+        <div class="seg" id="h17Seg">
+          <button type="button" data-v="0">Stands</button><button type="button" data-v="1">Hits</button>
+        </div>
+      </div>
+      <div class="field">
+        <label class="lab">Double after split</label>
+        <div class="seg" id="dasSeg">
+          <button type="button" data-v="1">Allowed</button><button type="button" data-v="0">Not allowed</button>
+        </div>
+      </div>
+      <div class="field">
+        <label class="lab">Surrender</label>
+        <div class="seg" id="surSeg">
+          <button type="button" data-v="1">Allowed</button><button type="button" data-v="0">Not allowed</button>
+        </div>
+      </div>
+      <p class="hint" id="rulesHint" style="margin-top:8px"></p>
+    </section>
+
+    <section>
+      <div class="best" id="best"></div>
+      <div class="row" style="margin-top:8px">
+        <button class="btn primary" id="restartBtn" type="button">Restart</button>
+        <button class="btn" id="cleanBtn" type="button">Clean view</button>
+      </div>
+      <p class="hint" id="keysHint" style="margin-top:8px"></p>
+    </section>
+    <p class="credit">
+      Every play's value is worked out exactly from the cards left in the shoe; the charts match the published ones for every rule setting.
+      Index plays: Don Schlesinger's Illustrious 18 and Fab 4.
+      For learning only: counting is legal, but casinos can refuse your play. Made by @samplesize_1.
+    </p>
+  </aside>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<div class="overlay" id="intro" hidden>
+  <div class="cardbox" role="dialog" aria-modal="true" aria-labelledby="introTitle">
+    <h2 id="introTitle">Two skills, in this order</h2>
+    <p>Blackjack can be beaten with two skills. Neither needs talent, only repetition.</p>
+    <ol>
+      <li><b>Strategy.</b> For every hand against every dealer card there is one best play. Learn the chart, then drill it until you never miss. This alone brings the house edge down to about half a percent.</li>
+      <li><b>Counting.</b> Keep a running total of the high and low cards that have left the shoe, turn it into a true count, and you know when the remaining cards favour you. Work down the drills in order: card values, running count, true count, index plays, a full table, and finally a bankroll session, where you size your bets from the count and see what the skill is worth in money.</li>
+    </ol>
+    <p>Each drill has three modes: <b>Study</b> shows you the answers, <b>Practice</b> quizzes you and brings your misses back, and <b>Test</b> is a timed run with your best score saved in this browser.</p>
+    <div class="row"><button class="btn primary" id="introGo" type="button">Start</button></div>
+  </div>
+</div>
+
+<script src="../../js/progress.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</html>

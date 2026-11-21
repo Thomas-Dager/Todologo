@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0f14">
+<link rel="icon" href="../../images/logo-cyan.png" type="image/png">
+<link rel="canonical" href="https://samplesize1.com/tools/state-atlas/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="States &amp; Provinces">
+<meta property="og:description" content="Learn the states, provinces and regions of every country on a map. Study, practice and tests, one country at a time. Free, by SampleSize_1.">
+<meta property="og:url" content="https://samplesize1.com/tools/state-atlas/">
+<meta property="og:image" content="https://samplesize1.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<title>States &amp; Provinces</title>
+<meta name="description" content="Learn the states, provinces and regions of every country on a map. Study, practice and tests, one country at a time. Free, by SampleSize_1.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* The World Capitals look: a full-bleed map, the prompt top-centre, the country list down the left,
+   settings on the right (both become bottom sheets on phones). */
+:root {
+  --bg: #0a0f14;
+  --bg-lift: #121b23;
+  --panel: rgba(13, 20, 27, 0.88);
+  --line: #223140;
+  --line-strong: #33475a;
+  --fg: #e8edf0;
+  --muted: #8d9ca9;
+  --bone: #ecdec2;
+  --scan: #6fd0e8;
+  --ok: #5fd39a;
+  --bad: #ff7a6b;
+  --close: #f5d04e;
+  --f-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --r: 10px;
+  color-scheme: dark;
+}
+[hidden] { display: none !important; }
+html, body { height: 100%; margin: 0; }
+body { background: var(--bg); color: var(--fg); font-family: var(--f-display); font-size: 14px; overflow: hidden; -webkit-font-smoothing: antialiased; }
+button, input { font: inherit; }
+:focus-visible { outline: 2px solid var(--scan); outline-offset: 2px; }
+#stage { position: fixed; inset: 0; background: radial-gradient(120% 80% at 50% 45%, #121e28 0%, #0d151c 45%, var(--bg) 78%); }
+#map { position: absolute; inset: 0; display: block; width: 100%; height: 100%; touch-action: none; outline: none; }
+#stage.hovering #map { cursor: pointer; }
+#stage.dragging #map { cursor: grabbing; }
+
+.ui {
+  position: fixed; inset: 0; pointer-events: none;
+  padding-block: calc(env(safe-area-inset-top, 0px) + 14px) calc(env(safe-area-inset-bottom, 0px) + 14px);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 12px;
+  grid-template-columns: minmax(248px, 290px) minmax(0, 1fr) minmax(280px, 320px);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+.ui > * { pointer-events: auto; }
+.panel { background: var(--panel); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid var(--line-strong); border-radius: var(--r); }
+.label { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+
+/* brand */
+.brand { grid-column: 1; grid-row: 1; align-self: start; justify-self: start; display: grid; gap: 5px; min-width: 0; text-shadow: 0 1px 10px rgba(5, 8, 11, 0.85); }
+.lockup { display: flex; align-items: center; gap: 11px; min-width: 0; }
+.home { display: inline-flex; align-items: center; gap: 5px; color: var(--bone); text-decoration: none; flex: none; border-radius: 7px; padding: 3px 6px 3px 5px; border: 1px solid var(--line-strong); background: rgba(13, 20, 27, 0.78); transition: border-color .15s, background .15s; }
+.home::before { content: "\2190"; font-family: var(--f-mono); font-size: 13px; font-weight: 700; line-height: 1; color: var(--scan); }
+.home:hover { border-color: var(--scan); background: rgba(19, 35, 44, 0.92); }
+.home img { height: 28px; width: 28px; object-fit: contain; filter: drop-shadow(0 1px 5px rgba(5, 8, 11, 0.85)); transition: filter .15s; }
+.home:hover img { filter: drop-shadow(0 1px 5px rgba(5, 8, 11, 0.85)) brightness(1.2) drop-shadow(0 0 6px rgba(111, 208, 232, 0.45)); }
+.mark { font-weight: 800; font-stretch: 125%; letter-spacing: -0.01em; font-size: 19px; color: var(--bone); line-height: 1; white-space: nowrap; }
+.mark span { color: var(--scan); }
+.mark sup { font-family: var(--f-mono); font-size: 9.5px; font-weight: 600; letter-spacing: 0.1em; color: var(--close); border: 1px solid currentColor; border-radius: 4px; padding: 1px 4px; margin-left: 6px; vertical-align: 6px; text-shadow: none; filter: drop-shadow(0 1px 3px rgba(5, 8, 11, 0.9)); }
+/* the small line under the name is thin and grey: over land it needs a closer, denser shadow than the name */
+.brand .sub { color: var(--muted); font-size: 12.5px; font-stretch: 90%; text-shadow: 0 0 3px rgba(5, 8, 11, 0.95), 0 0 6px rgba(5, 8, 11, 0.9), 0 1px 12px rgba(5, 8, 11, 0.9); }
+
+/* prompt */
+.prompt { grid-column: 2; grid-row: 1 / 3; align-self: start; justify-self: center; width: min(560px, 100%); box-sizing: border-box; padding: 12px 18px; display: grid; gap: 4px; text-align: center; }
+.prompt.is-ok { border-color: var(--ok); }
+.prompt.is-bad { border-color: var(--bad); }
+.prompt.is-close { border-color: var(--close); }
+.eyebrow { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--scan); }
+.pname { font-weight: 750; font-stretch: 112%; font-size: clamp(20px, 2.4vw, 32px); line-height: 1.12; color: var(--bone); text-wrap: balance; overflow-wrap: anywhere; }
+.pmeta { font-family: var(--f-mono); font-size: 11.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.pbar { height: 3px; background: var(--line); border-radius: 2px; overflow: hidden; margin-top: 4px; }
+.pbar i { display: block; height: 100%; width: 0%; background: var(--scan); transition: width .35s ease; }
+.answer { display: flex; gap: 6px; margin-top: 8px; }
+.answer input { flex: 1; min-width: 0; background: var(--bg); color: var(--fg); border: 1px solid var(--line-strong); border-radius: 7px; padding: 8px 10px; font-size: 16px; }
+.row { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin-top: 8px; }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; font-size: 12.5px; color: var(--muted); margin-top: 6px; }
+.legend i { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 5px; }
+.legend .ok i { background: var(--ok); } .legend .close i { background: var(--close); } .legend .bad i { background: var(--bad); }
+.legend b { color: var(--fg); font-variant-numeric: tabular-nums; }
+
+/* stats */
+.stats { grid-column: 3; grid-row: 1; align-self: start; justify-self: end; display: flex; gap: 6px; }
+.stat { padding: 6px 12px; min-width: 62px; }
+.stat b { display: block; font-family: var(--f-mono); font-size: 15px; font-weight: 600; color: var(--bone); font-variant-numeric: tabular-nums; }
+
+/* country list */
+.left { grid-column: 1; grid-row: 2; display: grid; grid-template-rows: minmax(0, 1fr) auto; gap: 12px; min-height: 0; }
+.countries { display: grid; grid-template-rows: auto auto minmax(0, 1fr); gap: 8px; padding: 12px; min-height: 0; }
+.countries input { background: var(--bg); color: var(--fg); border: 1px solid var(--line); border-radius: 7px; padding: 7px 9px; font-size: 14px; width: 100%; box-sizing: border-box; }
+.list { overflow-y: auto; overscroll-behavior: contain; min-height: 0; margin-right: -6px; padding-right: 6px; scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent; }
+.list h3 { position: sticky; top: 0; z-index: 1; margin: 0; background: #0f171e; }
+.list h3 button { width: 100%; display: flex; justify-content: space-between; align-items: center; background: none; border: 0; border-bottom: 1px solid var(--line); color: var(--scan); font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; padding: 8px 4px 6px; cursor: pointer; }
+.list h3 button em { font-style: normal; color: var(--muted); letter-spacing: 0; }
+.list ul { list-style: none; margin: 4px 0 8px; padding: 0; display: grid; gap: 2px; }
+.list li button { width: 100%; display: flex; justify-content: space-between; align-items: baseline; gap: 8px; text-align: left; background: transparent; color: var(--fg); border: 1px solid transparent; border-radius: 7px; padding: 6px 8px; font-weight: 600; font-size: 13.5px; cursor: pointer; }
+.list li button em { font-style: normal; font-family: var(--f-mono); font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; flex: none; }
+.list li button:hover { background: var(--bg-lift); }
+.list li button[aria-pressed="true"] { border-color: var(--scan); background: #13232c; }
+.list li button[aria-pressed="true"] em { color: var(--scan); }
+.list .none { color: var(--muted); font-size: 12px; line-height: 1.45; padding: 4px 4px 10px; margin: 0; }
+.viewcard { padding: 10px 12px; display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+
+/* settings */
+.right { grid-column: 3; grid-row: 2; align-self: start; padding: 14px; display: grid; gap: 10px; max-height: 100%; overflow-y: auto; box-sizing: border-box; }
+.lang-pick { position: relative; display: block; }
+.lang-pick svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); width: 15px; height: 15px; color: var(--scan); pointer-events: none; }
+.lang-pick::after { content: ""; position: absolute; right: 12px; top: 50%; width: 6px; height: 6px; margin-top: -5px; border: solid var(--muted); border-width: 0 1.5px 1.5px 0; transform: rotate(45deg); pointer-events: none; }
+#langSel { width: 100%; appearance: none; -webkit-appearance: none; font: inherit; font-size: 13px; font-weight: 600; color: var(--fg); background: var(--bg); border: 1px solid var(--line-strong); border-radius: 7px; padding: 8px 30px 8px 33px; cursor: pointer; }
+#langSel:hover, #langSel:focus { border-color: var(--scan); outline: none; }
+#langSel option { background: var(--bg-lift); color: var(--fg); }
+.seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 3px; gap: 3px; }
+.seg button { font-weight: 600; font-size: 13px; color: var(--muted); background: transparent; border: 0; border-radius: 6px; padding: 7px 6px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--bg-lift); color: var(--fg); box-shadow: inset 0 0 0 1px var(--line-strong); }
+.hint { color: var(--muted); font-size: 12.5px; line-height: 1.45; margin: 0; }
+.hint a { color: var(--fg); }
+.keys { font-family: var(--f-mono); font-size: 11px; color: var(--muted); line-height: 1.9; margin: 0; }
+kbd { font-family: var(--f-mono); font-size: 10.5px; border: 1px solid var(--line-strong); border-radius: 4px; padding: 0 4px; color: var(--fg); }
+.btn { font-size: 12.5px; font-weight: 600; color: var(--fg); background: var(--bg-lift); border: 1px solid var(--line-strong); border-radius: 7px; padding: 7px 10px; cursor: pointer; }
+.btn:hover { border-color: var(--scan); }
+.btn[aria-pressed="true"] { border-color: var(--scan); color: var(--scan); }
+.btn.primary { background: var(--bone); color: #1b1610; border-color: var(--bone); }
+.btn:disabled { opacity: .45; cursor: default; }
+
+/* bottom: study arrows, and the sheet buttons on phones */
+.dock { grid-column: 2; grid-row: 3; justify-self: center; display: flex; gap: 6px; }
+.dock .btn { padding: 9px 14px; font-size: 13.5px; background: var(--panel); }
+.only-phone { display: none; }
+.sheet-close { display: none; }
+
+.toast { position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 70px); transform: translateX(-50%); max-width: min(520px, calc(100vw - 32px)); box-sizing: border-box; background: var(--bg-lift); border: 1px solid var(--line-strong); border-radius: 8px; padding: 9px 14px; font-size: 13.5px; text-align: center; opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 5; }
+.toast.show { opacity: 1; }
+.toast.ok { border-color: var(--ok); } .toast.bad { border-color: var(--bad); } .toast.close { border-color: var(--close); }
+
+.loading { position: fixed; inset: 0; display: grid; place-items: center; background: var(--bg); z-index: 9; }
+.loading div { text-align: center; display: grid; gap: 8px; padding: 24px; }
+.loading b { font-weight: 800; font-stretch: 118%; font-size: 15px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--scan); }
+.loading span { color: var(--muted); }
+
+@media (max-width: 900px) {
+  .ui { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto minmax(0, 1fr) auto; gap: 8px; }
+  .brand { grid-column: 1; grid-row: 1; }
+  .brand .sub, .stats .stat:not(:first-child), .keys { display: none; }
+  .countries { grid-template-rows: auto auto auto minmax(0, 1fr); }
+  .mark { font-size: 16px; }
+  .stats { grid-column: 1; grid-row: 1; }
+  .stat { padding: 4px 9px; min-width: 0; }
+  .stat .label { font-size: 9.5px; }
+  .stat b { font-size: 13px; }
+  .prompt { grid-column: 1; grid-row: 2; padding: 10px 12px; }
+  .dock { grid-column: 1; grid-row: 4; }
+  .only-phone { display: inline-block; }
+  .left, .right { display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; max-height: 72vh; box-sizing: border-box; border-radius: 14px 14px 0 0; border: 1px solid var(--line-strong); border-bottom: 0; background: #0f171e; padding: 14px max(16px, env(safe-area-inset-right, 0px)) calc(env(safe-area-inset-bottom, 0px) + 14px) max(16px, env(safe-area-inset-left, 0px)); }
+  body.sheet-countries .left { display: grid; height: 72vh; }
+  body.sheet-options .right { display: grid; }
+  .left .panel { background: none; border: 0; padding: 0; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .sheet-close { display: block; justify-self: end; }
+  .list li button { padding: 9px 8px; font-size: 15px; }
+  body.sheet-countries .dock, body.sheet-options .dock { visibility: hidden; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<div id="stage"><canvas id="map" tabindex="0" aria-label="Map. Drag to turn it, scroll or pinch to zoom, click a country or a region."></canvas></div>
+
+<div class="ui">
+  <div class="brand">
+    <div class="lockup">
+      <a class="home" id="homeLink" href="../../Todologo.html" aria-label="Todologo" title="← Volver al menú de Todologo">
+        <img src="../../images/logo-cyan.png" alt="Todologo" width="28" height="28">
+      </a>
+      <div class="mark" id="brandMark">ESTADOS <span>Y PROVINCIAS</span><sup>BETA</sup></div>
+    </div>
+    <div class="sub" id="brandSub">Aprende las regiones de cada país</div>
+  </div>
+
+  <div class="prompt panel" id="prompt" aria-live="polite">
+    <div class="eyebrow" id="pEyebrow">Estados y Provincias</div>
+    <div class="pname" id="pName">Elige un país</div>
+    <div class="pmeta" id="pMeta">Cargando…</div>
+    <div class="pbar" id="pBar" hidden><i id="pBarFill"></i></div>
+    <form class="answer" id="answerForm" hidden autocomplete="off">
+      <input id="answer" type="text" inputmode="text" autocapitalize="words" autocorrect="off" spellcheck="false" placeholder="Escribe su nombre" aria-label="Nombre de la región resaltada">
+      <button class="btn primary" id="enterBtn" type="submit">Entrar</button>
+    </form>
+    <div class="row" id="quizRow" hidden>
+      <button class="btn" id="skipBtn" type="button">Saltar</button>
+      <button class="btn" id="giveUpBtn" type="button">Muéstramelo</button>
+    </div>
+    <div id="review" hidden>
+      <div class="legend">
+        <span class="ok"><i></i><b id="rOk">0</b> <span id="lblRight">correctas</span></span>
+        <span class="close" id="rCloseKey"><i></i><b id="rClose">0</b> <span id="lblClose">casi (½)</span></span>
+        <span class="bad"><i></i><b id="rBad">0</b> <span id="lblBad">falladas</span></span>
+      </div>
+      <div class="row">
+        <button class="btn primary" id="againBtn" type="button">Otra vez</button>
+        <button class="btn" id="missedBtn" type="button">Practicar los fallos</button>
+        <button class="btn" id="studyBtn" type="button">Volver a Estudiar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat panel"><span class="label" id="lblScore">Puntos</span><b id="sScore">–</b></div>
+    <div class="stat panel"><span class="label" id="lblTime">Tiempo</span><b id="sTime">0:00</b></div>
+    <div class="stat panel"><span class="label" id="lblStreak">Racha</span><b id="sStreak">0</b></div>
+  </div>
+
+  <div class="left" id="left">
+    <div class="countries panel">
+      <button class="btn sheet-close" type="button" data-close id="closeLeftBtn">Cerrar</button>
+      <div class="label" id="lblPickCountry">Elige un país</div>
+      <input id="search" type="search" placeholder="Buscar un país" aria-label="Buscar un país" autocomplete="off">
+      <div class="list" id="list"></div>
+    </div>
+    <div class="viewcard panel">
+      <button class="btn" id="zoomOut" type="button" aria-label="Zoom out">Zoom −</button>
+      <button class="btn" id="zoomIn" type="button" aria-label="Zoom in">Zoom +</button>
+      <button class="btn" id="resetView" type="button">Restablecer vista</button>
+      <button class="btn" id="worldBtn" type="button">Mundo</button>
+    </div>
+  </div>
+
+  <div class="right panel" id="right">
+    <button class="btn sheet-close" type="button" data-close id="closeRightBtn">Cerrar</button>
+    <div class="label" id="lblLang">Idioma</div>
+    <span class="lang-pick">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.7 2.6 15.3 0 18M12 3c-2.6 2.7-2.6 15.3 0 18"/></svg>
+      <select id="langSel">
+        <option value="es">Español</option>
+        <option value="en">English</option>
+        <option value="pt">Português</option>
+        <option value="fr">Français</option>
+        <option value="de">Deutsch</option>
+        <option value="it">Italiano</option>
+      </select>
+    </span>
+    <div class="label" id="lblMode">Modo</div>
+    <div class="seg" id="modeSeg">
+      <button type="button" data-v="study" id="btnModeStudy">Estudiar</button>
+      <button type="button" data-v="practice" id="btnModePractice">Practicar</button>
+      <button type="button" data-v="test" id="btnModeTest">Examen</button>
+    </div>
+    <p class="hint" id="modeHint"></p>
+    <div class="label" id="lblQuestions">Preguntas</div>
+    <div class="seg" id="formatSeg">
+      <button type="button" data-v="click" id="btnFmtClick">Haz clic</button>
+      <button type="button" data-v="type" id="btnFmtType">Escribir el nombre</button>
+    </div>
+    <p class="hint" id="formatHint"></p>
+    <div class="row" style="justify-content:flex-start;margin-top:0">
+      <button class="btn primary" id="restartBtn" type="button">Reiniciar</button>
+      <button class="btn" id="namesBtn" type="button" aria-pressed="false">Mostrar nombres</button>
+    </div>
+    <p class="hint" id="bestLine"></p>
+    <p class="keys" id="keysLine"><kbd>←</kbd><kbd>→</kbd> anterior / siguiente · <kbd>+</kbd><kbd>−</kbd> zoom · <kbd>Esc</kbd> deseleccionar, luego volver al globo · <kbd>N</kbd> nombres</p>
+    <p class="hint" id="creditLine">Beta. Fronteras sincronizadas con <a href="../capital-atlas/index.html">Capitales del Mundo</a>. Formas: <a href="https://www.naturalearthdata.com/" rel="noopener">Natural Earth</a> y <a href="https://www.geoboundaries.org/" rel="noopener">geoBoundaries</a>. Todologo.</p>
+  </div>
+
+  <div class="dock">
+    <button class="btn only-phone" id="countriesBtn" type="button">Países</button>
+    <button class="btn" id="prevBtn" type="button" hidden>← Anterior</button>
+    <button class="btn" id="nextBtn" type="button" hidden>Siguiente →</button>
+    <button class="btn only-phone" id="optionsBtn" type="button">Opciones</button>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+<div class="loading" id="loading"><div><b id="loadingTitle">Estados y Provincias</b><span id="loadingText">Cargando el mapa…</span></div></div>
+
+<script src="../../js/progress.js"></script>
+<script src="../capital-atlas/offline-data.js"></script>
+<script src="offline-state-data.js"></script>
+<script src="js/bundle.js"></script>
+</html>

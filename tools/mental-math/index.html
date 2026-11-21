@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="es">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0f14">
+<link rel="icon" href="../../images/logo-cyan.png" type="image/png">
+<title>Entrenador de Cálculo Mental — Todologo</title>
+<meta name="description" content="Domina el cálculo mental de izquierda a derecha en siete ejercicios progresivos: sumas, complementos, multiplicaciones rápidas, cuadrados, porcentajes y raíces.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root {
+  --bg: #0a0f14;
+  --bg-lift: #121b23;
+  --panel: rgba(13, 20, 27, 0.88);
+  --line: #223140;
+  --line-strong: #33475a;
+  --fg: #e8edf0;
+  --muted: #8d9ca9;
+  --bone: #ecdec2;
+  --scan: #6fd0e8;
+  --amber: #f0cf6a;
+  --ok: #5fd39a;
+  --bad: #ff7a6b;
+  --felt: #0d1f26;
+  --felt-edge: #1e424e;
+  --f-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --r: 10px;
+  color-scheme: dark;
+}
+[hidden] { display: none !important; }
+html, body { height: 100%; margin: 0; }
+body {
+  background: radial-gradient(120% 80% at 50% 45%, #121e28 0%, #0d151c 45%, var(--bg) 78%) fixed;
+  color: var(--fg);
+  font-family: var(--f-display);
+  font-size: 14px;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+button { touch-action: manipulation; }
+
+.ui {
+  position: fixed; inset: 0;
+  padding-block: calc(env(safe-area-inset-top, 0px) + 14px) calc(env(safe-area-inset-bottom, 0px) + 14px);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid;
+  grid-template-columns: minmax(268px, 1fr) minmax(0, 740px) minmax(296px, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 12px;
+}
+
+/* ---------- brand ---------- */
+.brand { grid-column: 1; grid-row: 1; align-self: start; justify-self: start; display: grid; gap: 5px; min-width: 0; text-shadow: 0 1px 10px rgba(5, 8, 11, 0.85); }
+.lockup { display: flex; align-items: center; gap: 11px; min-width: 0; }
+.home { display: inline-flex; align-items: center; gap: 5px; color: var(--bone); text-decoration: none; flex: none; border-radius: 7px; padding: 3px 6px 3px 5px; border: 1px solid var(--line-strong); background: rgba(13, 20, 27, 0.78); transition: border-color .15s, background .15s; }
+.home::before { content: "\2190"; font-family: var(--f-mono); font-size: 13px; font-weight: 700; line-height: 1; color: var(--scan); }
+.home:hover { border-color: var(--scan); background: rgba(19, 35, 44, 0.92); }
+.home .logo-mark { height: 28px; width: 28px; object-fit: contain; display: block; transition: filter .15s; filter: drop-shadow(0 1px 5px rgba(5, 8, 11, 0.85)); }
+.home:hover .logo-mark { filter: drop-shadow(0 1px 5px rgba(5, 8, 11, 0.85)) brightness(1.2) drop-shadow(0 0 6px rgba(111, 208, 232, 0.45)); }
+.brand .mark { font-weight: 800; font-stretch: 105%; letter-spacing: -0.01em; font-size: 20px; color: var(--bone); line-height: 1; white-space: nowrap; }
+.brand .mark span { color: var(--scan); }
+.brand .mark sup { font-family: var(--f-mono); font-weight: 600; font-size: 9.5px; letter-spacing: 0.12em; color: var(--muted); border: 1px solid var(--line-strong); border-radius: 4px; padding: 1px 4px; margin-left: 6px; vertical-align: 6px; }
+.brand .sub { color: var(--muted); font-size: 12.5px; }
+@media (max-width: 1440px) { .brand .mark { font-size: 16px; } }
+@media (max-width: 1180px) { .brand .sub { display: none; } }
+
+/* ---------- centre column ---------- */
+.centre { grid-column: 2; grid-row: 1 / 3; min-height: 0; display: flex; flex-direction: column; gap: 10px; }
+.prompt {
+  flex: none; box-sizing: border-box;
+  background: var(--panel); border: 1px solid var(--line-strong); border-radius: var(--r);
+  padding: 12px 18px; display: grid; gap: 4px; text-align: center; position: relative;
+  transition: border-color .15s;
+}
+.prompt::before {
+  content: ""; position: absolute; top: 9px; left: 12px; width: 7px; height: 7px; border-radius: 50%;
+  border: 1.5px solid var(--line-strong);
+}
+.eyebrow { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--scan); }
+.pname { font-weight: 750; font-stretch: 112%; font-size: clamp(21px, 2.4vw, 30px); line-height: 1.12; color: var(--bone); text-wrap: balance; }
+.pmeta { font-family: var(--f-mono); font-size: 11.5px; color: var(--muted); font-variant-numeric: tabular-nums; min-height: 1.3em; }
+.ptip { font-size: 13px; line-height: 1.5; color: var(--muted); max-width: 64ch; justify-self: center; text-wrap: pretty; margin-top: 2px; }
+.ptip b { color: var(--fg); font-weight: 600; }
+.pbar { height: 3px; background: var(--line); border-radius: 2px; overflow: hidden; margin-top: 4px; }
+.pbar i { display: block; height: 100%; width: 0%; background: var(--scan); transition: width .35s ease; }
+.pbar.is-off { visibility: hidden; }
+.prompt.is-ok { border-color: var(--ok); }
+.prompt.is-bad { border-color: var(--bad); }
+.prompt.is-ok .eyebrow { color: var(--ok); }
+.prompt.is-bad .eyebrow { color: var(--bad); }
+
+.stage { flex: 1 1 0; min-height: 0; display: flex; }
+.felt {
+  flex: 1; min-height: 0; overflow: auto; box-sizing: border-box; position: relative;
+  background: radial-gradient(90% 70% at 50% 0%, #122b36 0%, var(--felt) 60%, #09151b 100%);
+  border: 1px solid var(--felt-edge); border-radius: 18px;
+  padding: 20px; display: grid; align-content: center; justify-items: center; gap: 16px;
+  scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent;
+}
+.felt.is-top { align-content: start; }
+.stage.flash-ok .felt { border-color: var(--ok); box-shadow: 0 0 0 1px var(--ok); }
+.stage.flash-bad .felt { border-color: var(--bad); box-shadow: 0 0 0 1px var(--bad); }
+
+/* ---------- Mental Math specific cards & breakdown ---------- */
+.math-board {
+  display: grid; gap: 16px; justify-items: center; width: 100%; max-width: 620px;
+}
+.problem-box {
+  background: rgba(10, 15, 20, 0.65);
+  border: 1px solid var(--line-strong);
+  border-radius: 14px;
+  padding: 22px 32px;
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  flex-wrap: wrap;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
+}
+.problem-expr {
+  font-family: var(--f-mono);
+  font-weight: 600;
+  font-size: clamp(28px, 4.2vw, 48px);
+  color: var(--bone);
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.problem-eq {
+  font-family: var(--f-mono);
+  font-size: clamp(24px, 3.2vw, 38px);
+  color: var(--muted);
+}
+.answer-slot {
+  font-family: var(--f-mono);
+  font-weight: 700;
+  font-size: clamp(28px, 4.2vw, 46px);
+  min-width: 110px;
+  padding: 4px 16px;
+  border-radius: 10px;
+  background: #0b1319;
+  border: 2px solid var(--scan);
+  color: var(--scan);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.answer-slot.is-ok { border-color: var(--ok); color: var(--ok); background: rgba(95, 211, 154, 0.08); }
+.answer-slot.is-bad { border-color: var(--bad); color: var(--bad); background: rgba(255, 122, 107, 0.08); }
+
+/* Mental steps pipeline */
+.steps-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(168px, 1fr));
+  gap: 10px;
+}
+.step-card {
+  background: rgba(10, 15, 20, 0.52);
+  border: 1px solid var(--line-strong);
+  border-radius: 11px;
+  padding: 12px 14px;
+  display: grid;
+  gap: 5px;
+  text-align: left;
+  position: relative;
+}
+.step-card .step-num {
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--scan);
+}
+.step-card .step-math {
+  font-family: var(--f-mono);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--bone);
+  font-variant-numeric: tabular-nums;
+}
+.step-card .step-desc {
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+.step-card.final {
+  border-color: rgba(95, 211, 154, 0.55);
+  background: rgba(95, 211, 154, 0.06);
+}
+.step-card.final .step-num { color: var(--ok); }
+
+/* Study reference cards */
+.study-wrap {
+  width: 100%; max-width: 630px; display: grid; gap: 14px;
+}
+.rule-banner {
+  background: rgba(10, 15, 20, 0.55);
+  border: 1px solid var(--line-strong);
+  border-left: 3px solid var(--scan);
+  border-radius: 10px;
+  padding: 13px 16px;
+  color: var(--fg);
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+.rule-banner b { color: var(--bone); }
+.rule-banner code {
+  font-family: var(--f-mono);
+  font-size: 12.5px;
+  color: var(--scan);
+  background: rgba(111, 208, 232, 0.1);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+.guide-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 10px;
+}
+.guide-box {
+  background: rgba(10, 15, 20, 0.56);
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: grid;
+  gap: 6px;
+  align-content: start;
+}
+.guide-box h4 {
+  margin: 0;
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--scan);
+}
+.guide-box p, .guide-box ul {
+  margin: 0;
+  font-size: 12.8px;
+  line-height: 1.5;
+  color: var(--fg);
+}
+.guide-box ul {
+  padding-left: 17px;
+  display: grid;
+  gap: 4px;
+  color: var(--muted);
+}
+.guide-box li b { color: var(--bone); }
+.guide-box.why { border-left: 3px solid var(--ok); }
+.guide-box.why h4 { color: var(--ok); }
+.guide-box.uses { border-left: 3px solid var(--scan); }
+.guide-box.trap { border-left: 3px solid var(--amber); background: rgba(240, 207, 106, 0.05); }
+.guide-box.trap h4 { color: var(--amber); }
+.guide-box code {
+  font-family: var(--f-mono);
+  font-size: 12px;
+  color: var(--bone);
+  background: rgba(255, 255, 255, 0.07);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+.step-takeaway {
+  margin-top: 8px;
+  background: rgba(111, 208, 232, 0.08);
+  border: 1px solid rgba(111, 208, 232, 0.28);
+  border-radius: 9px;
+  padding: 9px 13px;
+  font-size: 12.5px;
+  line-height: 1.48;
+  color: var(--fg);
+  text-align: left;
+}
+.step-takeaway b { color: var(--scan); }
+.hint-banner {
+  background: rgba(240, 207, 106, 0.08);
+  border: 1px solid rgba(240, 207, 106, 0.35);
+  border-radius: 9px;
+  padding: 9px 13px;
+  font-size: 12.5px;
+  line-height: 1.48;
+  color: var(--bone);
+  text-align: left;
+}
+.facts { width: 100%; border-collapse: collapse; font-size: 13px; background: rgba(10, 15, 20, 0.38); border-radius: 10px; overflow: hidden; }
+.facts th { font-family: var(--f-mono); font-weight: 600; font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--scan); text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--line-strong); }
+.facts td { padding: 8px 12px; border-top: 1px solid rgba(232, 237, 240, 0.07); color: var(--muted); }
+.facts td:first-child { font-family: var(--f-mono); font-weight: 600; color: var(--bone); white-space: nowrap; }
+.facts td.n { font-family: var(--f-mono); font-weight: 600; color: var(--ok); white-space: nowrap; }
+
+/* On-screen numeric keypad */
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(48px, 64px));
+  gap: 6px;
+  justify-content: center;
+}
+.keypad button {
+  font-family: var(--f-mono);
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--fg);
+  background: var(--panel);
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  padding: 10px 0;
+  cursor: pointer;
+}
+.keypad button:hover { border-color: var(--scan); background: var(--bg-lift); }
+.keypad button.enter {
+  grid-column: span 2;
+  background: var(--bone);
+  color: #1b1610;
+  border-color: var(--bone);
+  font-family: var(--f-display);
+  font-weight: 700;
+}
+
+/* ---------- dock & buttons ---------- */
+.dock { flex: none; display: grid; gap: 8px; justify-items: center; }
+.actions { display: flex; gap: 7px; flex-wrap: wrap; justify-content: center; width: 100%; }
+.actions:empty { display: none; }
+.act {
+  font: inherit; font-weight: 700; font-size: 15px; color: var(--fg); cursor: pointer;
+  background: var(--panel); border: 1px solid var(--line-strong); border-radius: 9px; padding: 11px 18px; min-width: 102px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+}
+.act.num { font-family: var(--f-mono); font-size: 17px; min-width: 96px; }
+.act kbd { font-family: var(--f-mono); font-weight: 500; font-size: 10.5px; color: var(--muted); border: 1px solid var(--line-strong); border-radius: 4px; padding: 0 4px; }
+.act:hover:not(:disabled) { border-color: var(--scan); }
+.act:disabled { opacity: .38; cursor: default; }
+.act.primary { background: var(--bone); color: #1b1610; border-color: var(--bone); }
+.act.primary kbd { color: #5d5345; border-color: #a99c84; }
+.act.is-right { border-color: var(--ok); box-shadow: 0 0 0 1px var(--ok); opacity: 1 !important; color: var(--ok); }
+.act.is-wrong { border-color: var(--bad); box-shadow: 0 0 0 1px var(--bad); opacity: 1 !important; color: var(--bad); }
+
+.navrow { display: flex; gap: 6px; justify-content: center; }
+.btn { font: inherit; font-size: 12.5px; font-weight: 600; color: var(--fg); background: var(--bg-lift); border: 1px solid var(--line-strong); border-radius: 7px; padding: 7px 11px; cursor: pointer; }
+.btn:hover { border-color: var(--scan); }
+.btn.primary { background: var(--bone); color: #1b1610; border-color: var(--bone); }
+#settingsBtn, #cleanExit { display: none; }
+
+/* ---------- stats ---------- */
+.stats { grid-column: 3; grid-row: 1; justify-self: end; align-self: start; display: flex; gap: 6px; }
+.stat { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; display: grid; gap: 1px; min-width: 64px; }
+.stat b { font-family: var(--f-mono); font-weight: 600; font-size: 16px; font-variant-numeric: tabular-nums; }
+.stat small { font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+/* ---------- left column ---------- */
+.leftcol { grid-column: 1; grid-row: 2; align-self: start; justify-self: start; width: 256px; max-height: 100%; min-height: 0; display: flex; flex-direction: column; gap: 10px; }
+.rail {
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 10px 8px;
+  display: grid; gap: 2px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent;
+}
+.rail-title { margin: 2px 6px 6px; font-size: 10.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.rail button.item {
+  font: inherit; color: var(--fg); background: transparent; border: 1px solid transparent; border-radius: 7px;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 8px; text-align: left; cursor: pointer;
+  padding: 7px 9px; font-size: 13px; font-weight: 650;
+}
+.rail button.item span i { font-style: normal; font-family: var(--f-mono); font-weight: 500; font-size: 11px; color: var(--muted); margin-right: 6px; }
+.rail button.item em { font-style: normal; font-family: var(--f-mono); font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.rail button.item:hover { background: var(--bg-lift); }
+.rail button.item[aria-pressed="true"] { border-color: var(--scan); background: #13232c; }
+.rail button.item[aria-pressed="true"] em { color: var(--scan); }
+.rail button.item em.done { color: var(--ok); }
+.rail button.item em.done::after { content: " \2713"; }
+.rail button.item em.next { color: var(--bone); }
+.rail .path { margin: 8px 6px 2px; font-size: 12px; line-height: 1.5; color: var(--muted); }
+
+/* ---------- right settings panel ---------- */
+.panel {
+  grid-column: 3; grid-row: 2; justify-self: end; align-self: start;
+  width: 292px; max-height: 100%; overflow-y: auto; box-sizing: border-box;
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--r);
+  padding: 14px; display: grid; gap: 14px;
+  scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent;
+}
+.panel h3 { margin: 0 0 7px; font-size: 10.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.panel section { display: grid; }
+.seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 3px; gap: 3px; }
+.seg button { font: inherit; font-weight: 600; font-size: 13px; color: var(--muted); background: transparent; border: 0; border-radius: 6px; padding: 7px 6px; cursor: pointer; white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: var(--bg-lift); color: var(--fg); box-shadow: inset 0 0 0 1px var(--line-strong); }
+.seg button:hover { color: var(--fg); }
+.row { display: flex; gap: 6px; flex-wrap: wrap; }
+.hint { color: var(--muted); font-size: 12px; line-height: 1.5; margin: 0; }
+.hint kbd { font-family: var(--f-mono); font-size: 11px; border: 1px solid var(--line-strong); border-radius: 4px; padding: 0 4px; color: var(--fg); }
+.best { font-family: var(--f-mono); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.best b { color: var(--bone); font-weight: 600; }
+.credit { font-size: 11px; color: var(--muted); line-height: 1.55; margin: 0; }
+.close-sheet { display: none; justify-self: end; }
+
+/* ---------- overlays ---------- */
+.overlay {
+  position: fixed; inset: 0; display: grid; grid-template-columns: minmax(0, 1fr); place-items: center; z-index: 20;
+  background: rgba(6, 10, 14, 0.65); backdrop-filter: blur(3px);
+  padding-inline: 16px;
+}
+.cardbox { box-sizing: border-box; width: min(540px, 100%); max-height: 86vh; overflow-y: auto; background: var(--bg-lift); border: 1px solid var(--line-strong); border-radius: 14px; padding: 22px; display: grid; gap: 14px; }
+.cardbox h2 { margin: 0; font-weight: 800; font-size: 15px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--scan); }
+.cardbox p, .cardbox ol { margin: 0; color: var(--muted); line-height: 1.55; }
+.cardbox ol { padding-left: 20px; display: grid; gap: 6px; }
+.cardbox b { color: var(--fg); font-weight: 600; }
+.cardbox .row { justify-content: flex-end; }
+
+body.clean .panel, body.clean .leftcol, body.clean .brand .sub, body.clean .stats, body.clean #settingsBtn, body.clean #howBtn { display: none !important; }
+body.clean #cleanExit { display: inline-block; opacity: .55; }
+
+@media (max-width: 900px) {
+  .ui { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto minmax(0, 1fr); gap: 8px; }
+  .brand { grid-column: 1; grid-row: 1; justify-self: center; }
+  .stats { display: none; }
+  .leftcol { grid-column: 1; grid-row: 2; width: 100%; }
+  .rail { width: 100%; overflow-x: auto; display: flex; flex-wrap: nowrap; gap: 5px; padding: 0; background: none; border: 0; }
+  .rail-title, .rail .path { display: none; }
+  .rail button.item { flex: none; background: var(--panel); border-color: var(--line); white-space: nowrap; padding: 6px 10px; }
+  .centre { grid-column: 1; grid-row: 3; }
+  #settingsBtn { display: inline-block; }
+  .panel {
+    position: fixed; left: 0; right: 0; bottom: 0; width: auto; max-height: 76vh; z-index: 15;
+    border-radius: 16px 16px 0 0; background: #0d141b; transform: translateY(105%); transition: transform .25s ease;
+  }
+  body.sheet-open .panel { transform: none; }
+  .panel .close-sheet { display: inline-block; }
+}
+</style>
+
+<div class="ui">
+  <div class="brand">
+    <div class="lockup">
+      <a class="home" id="homeLink" href="../../Todologo.html" aria-label="Página de inicio de Todologo" title="← Volver al menú de Todologo">
+        <img class="logo-mark" src="../../images/logo-cyan.png" alt="Todologo">
+      </a>
+      <div class="mark" id="brandMark">CÁLCULO <span>MENTAL</span><sup>T020</sup></div>
+    </div>
+    <div class="sub" id="brandSub">Aritmética rápida de izquierda a derecha, técnica por técnica</div>
+  </div>
+
+  <div class="leftcol">
+    <nav class="rail" id="rail" aria-label="Ejercicios">
+      <div class="rail-title" id="railTitle">Ejercicios, en orden</div>
+      <div id="railList" style="display:contents"></div>
+      <p class="path" id="railPath"></p>
+    </nav>
+  </div>
+
+  <main class="centre">
+    <div class="prompt" id="prompt" aria-live="polite">
+      <div class="eyebrow" id="pEyebrow">Cargando</div>
+      <div class="pname" id="pName">Entrenador de Cálculo Mental</div>
+      <div class="pmeta" id="pMeta">&nbsp;</div>
+      <div class="pbar is-off" id="pBarWrap"><i id="pBar"></i></div>
+      <div class="ptip" id="pTip" hidden></div>
+    </div>
+
+    <div class="stage" id="stageBox">
+      <div class="felt" id="felt"></div>
+    </div>
+
+    <div class="dock">
+      <div class="actions" id="actions"></div>
+      <div class="navrow">
+        <button class="btn" id="settingsBtn" type="button">Ajustes</button>
+        <button class="btn" id="howBtn" type="button">Cómo funciona</button>
+        <button class="btn" id="cleanExit" type="button">Salir de vista limpia</button>
+      </div>
+    </div>
+  </main>
+
+  <div class="stats" id="stats">
+    <div class="stat"><small id="statAccLabel">Precisión</small><b id="sAcc">–</b></div>
+    <div class="stat"><small id="statTimeLabel">Tiempo</small><b id="sTime">0:00</b></div>
+    <div class="stat"><small id="statStreakLabel">Racha</small><b id="sStreak">0</b></div>
+  </div>
+
+  <aside class="panel" id="panel" aria-label="Ajustes">
+    <button class="btn close-sheet" id="closeSheet" type="button">Listo</button>
+    <section>
+      <h3 id="langHeading">Idioma</h3>
+      <select id="langSel" aria-label="Idioma" style="width:100%;font:inherit;font-size:13px;font-weight:600;color:var(--fg);background:var(--bg);border:1px solid var(--line-strong);border-radius:7px;padding:8px 10px;">
+        <option value="es">Español</option>
+        <option value="en">English</option>
+      </select>
+    </section>
+
+    <section>
+      <h3 id="modeHeading">Modo</h3>
+      <div class="seg" id="modeSeg">
+        <button type="button" data-v="study">Estudiar</button>
+        <button type="button" data-v="practice">Practicar</button>
+        <button type="button" data-v="test">Examen</button>
+      </div>
+      <p class="hint" id="modeHint" style="margin-top:7px"></p>
+    </section>
+
+    <section>
+      <h3 id="inputHeading">Respuesta</h3>
+      <div class="seg" id="inputSeg">
+        <button type="button" data-v="choices">4 opciones</button>
+        <button type="button" data-v="keypad">Teclado</button>
+      </div>
+      <p class="hint" id="inputHint" style="margin-top:7px"></p>
+    </section>
+
+    <section>
+      <h3 id="diffHeading">Dificultad</h3>
+      <div class="seg" id="diffSeg">
+        <button type="button" data-v="normal">Normal</button>
+        <button type="button" data-v="hard">Avanzado</button>
+      </div>
+    </section>
+
+    <section>
+      <div class="best" id="best"></div>
+      <div class="row" style="margin-top:8px">
+        <button class="btn primary" id="restartBtn" type="button">Reiniciar</button>
+        <button class="btn" id="cleanBtn" type="button">Vista limpia</button>
+      </div>
+      <p class="hint" id="keysHint" style="margin-top:8px"></p>
+    </section>
+
+    <p class="credit" id="creditText">
+      El secreto del cálculo mental es operar siempre de izquierda a derecha (de las cifras más grandes a las más pequeñas) para mantener un único número vivo en la memoria de trabajo. Parte de Todologo.
+    </p>
+  </aside>
+</div>
+
+<div class="overlay" id="intro" hidden>
+  <div class="cardbox" role="dialog" aria-modal="true" aria-labelledby="introTitle">
+    <h2 id="introTitle">Cálculo mental de izquierda a derecha</h2>
+    <p id="introBody1">En la escuela aprendemos a calcular de derecha a izquierda porque es cómodo en papel, pero en la mente humana eso obliga a recordar demasiados dígitos sueltos.</p>
+    <ol id="introList">
+      <li><b>Opera de izquierda a derecha:</b> suma o multiplica primero las centenas y decenas; así tienes una estimación inmediata y solo guardas un subtotal en la cabeza.</li>
+      <li><b>Transforma el problema:</b> restar 288 es más fácil como «restar 300 y sumar 12»; multiplicar por 25 es «dividir entre 4 y añadir dos ceros».</li>
+      <li><b>Tres modos por habilidad:</b> <b>Estudiar</b> desglosa el método paso a paso, <b>Practicar</b> te entrena sin límite y <b>Examen</b> mide tu precisión en 12 rondas.</li>
+    </ol>
+    <div class="row"><button class="btn primary" id="introGo" type="button">Empezar</button></div>
+  </div>
+</div>
+
+<script src="../../js/progress.js"></script>
+<script src="app.js"></script>
+</html>

@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 180" fill="none">
+  <defs>
+    <radialGradient id="glowC" cx="50%" cy="48%" r="48%">
+      <stop offset="0%" stop-color="#ff9b26" stop-opacity="0.34"/>
+      <stop offset="65%" stop-color="#d8680e" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#0e0d0b" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="amberStrokeC" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffe09e"/>
+      <stop offset="50%" stop-color="#ff9b26"/>
+      <stop offset="100%" stop-color="#b85108"/>
+    </linearGradient>
+    <linearGradient id="amberFillC" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffd384" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#9e4204" stop-opacity="0.06"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Holographic base rings -->
+  <ellipse cx="110" cy="155" rx="68" ry="11" fill="url(#glowC)"/>
+  <ellipse cx="110" cy="155" rx="64" ry="9.5" stroke="#ff9b26" stroke-opacity="0.55" stroke-width="1.2"/>
+  <ellipse cx="110" cy="155" rx="42" ry="5.5" stroke="#ffd384" stroke-opacity="0.32" stroke-width="0.9" stroke-dasharray="3 3"/>
+  <circle cx="110" cy="84" r="64" fill="url(#glowC)"/>
+
+  <!-- Atmospheric altitude ticks -->
+  <g stroke="#ff9b26" stroke-opacity="0.28" stroke-width="1" stroke-dasharray="4 4">
+    <line x1="36" y1="42" x2="184" y2="42"/>
+    <line x1="36" y1="78" x2="184" y2="78"/>
+    <line x1="36" y1="114" x2="184" y2="114"/>
+  </g>
+
+  <!-- High Cirrus streaks -->
+  <g stroke="#ffe09e" stroke-linecap="round" stroke-opacity="0.85" stroke-width="1.6">
+    <path d="M44 42 C64 36, 82 36, 98 40"/>
+    <path d="M54 49 C74 44, 92 44, 108 47" stroke-opacity="0.55"/>
+    <path d="M132 38 C148 33, 166 35, 178 39" stroke-opacity="0.65"/>
+  </g>
+
+  <!-- Cumulonimbus + Altocumulus layered silhouette -->
+  <path d="M62 120
+           C46 120, 40 107, 49 97
+           C48 84, 62 76, 74 82
+           C79 65, 97 56, 113 62
+           C118 48, 137 44, 149 54
+           C163 50, 176 62, 171 76
+           C181 83, 179 102, 167 109
+           C169 116, 162 120, 152 120 Z"
+        fill="url(#amberFillC)" stroke="url(#amberStrokeC)" stroke-width="2.1" stroke-linejoin="round"/>
+
+  <!-- Inner updraft contour & anvil lightning spark -->
+  <path d="M74 106 C80 94, 92 92, 101 98 C108 86, 125 84, 134 94 C144 92, 154 99, 152 108"
+        stroke="#ffe09e" stroke-opacity="0.45" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+  <path d="M114 120 L106 134 L115 134 L108 148"
+        stroke="#ffe09e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M84 127 L80 136 M96 127 L92 136 M132 127 L128 136"
+        stroke="#ff9b26" stroke-opacity="0.7" stroke-width="1.4" stroke-linecap="round"/>
+</svg>

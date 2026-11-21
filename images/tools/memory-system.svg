@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 180" fill="none">
+  <defs>
+    <radialGradient id="glowM" cx="50%" cy="48%" r="48%">
+      <stop offset="0%" stop-color="#ff9b26" stop-opacity="0.36"/>
+      <stop offset="65%" stop-color="#d8680e" stop-opacity="0.11"/>
+      <stop offset="100%" stop-color="#0e0d0b" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="amberStrokeM" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffe09e"/>
+      <stop offset="50%" stop-color="#ff9b26"/>
+      <stop offset="100%" stop-color="#b85108"/>
+    </linearGradient>
+    <linearGradient id="amberFillM" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffb84d" stop-opacity="0.34"/>
+      <stop offset="100%" stop-color="#9e4204" stop-opacity="0.12"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Holographic base -->
+  <ellipse cx="110" cy="155" rx="68" ry="11" fill="url(#glowM)"/>
+  <ellipse cx="110" cy="155" rx="64" ry="9.5" stroke="#ff9b26" stroke-opacity="0.55" stroke-width="1.2"/>
+  <ellipse cx="110" cy="155" rx="44" ry="5.5" stroke="#ffd384" stroke-opacity="0.32" stroke-width="0.9" stroke-dasharray="3 3"/>
+
+  <circle cx="110" cy="82" r="64" fill="url(#glowM)"/>
+
+  <!-- Memory Palace Isometric Temple + Neural Peg Nodes -->
+  <g transform="translate(110, 84)">
+    <!-- Pediment (roof) -->
+    <polygon points="0,-54 -56,-24 56,-24" fill="url(#amberFillM)" stroke="url(#amberStrokeM)" stroke-width="2.1" stroke-linejoin="round"/>
+    <line x1="-46" y1="-20" x2="46" y2="-20" stroke="#ffd384" stroke-width="1.6"/>
+
+    <!-- 4 Classical Columns representing Peg Slots -->
+    <rect x="-42" y="-18" width="12" height="52" rx="2" fill="url(#amberFillM)" stroke="#ff9b26" stroke-width="1.5"/>
+    <rect x="-18" y="-18" width="12" height="52" rx="2" fill="url(#amberFillM)" stroke="#ff9b26" stroke-width="1.5"/>
+    <rect x="6" y="-18" width="12" height="52" rx="2" fill="url(#amberFillM)" stroke="#ff9b26" stroke-width="1.5"/>
+    <rect x="30" y="-18" width="12" height="52" rx="2" fill="url(#amberFillM)" stroke="#ff9b26" stroke-width="1.5"/>
+
+    <!-- Temple base steps -->
+    <rect x="-52" y="34" width="104" height="7" rx="1.5" fill="url(#amberFillM)" stroke="#ffd384" stroke-width="1.5"/>
+    <rect x="-58" y="41" width="116" height="7" rx="1.5" fill="url(#amberFillM)" stroke="#ff9b26" stroke-width="1.5"/>
+
+    <!-- Glowing neural chain linking the columns -->
+    <polyline points="-36,6 -12,-4 12,10 36,-2" fill="none" stroke="#fff0c2" stroke-width="2" stroke-dasharray="3 2"/>
+    <circle cx="-36" cy="6" r="4" fill="#fff0c2" stroke="#ff9b26" stroke-width="1.4"/>
+    <circle cx="-12" cy="-4" r="4" fill="#fff0c2" stroke="#ff9b26" stroke-width="1.4"/>
+    <circle cx="12" cy="10" r="4" fill="#fff0c2" stroke="#ff9b26" stroke-width="1.4"/>
+    <circle cx="36" cy="-2" r="4" fill="#fff0c2" stroke="#ff9b26" stroke-width="1.4"/>
+
+    <!-- Phonetic digits in pediment -->
+    <text x="0" y="-31" text-anchor="middle" fill="#ffe09e" font-family="monospace" font-weight="700" font-size="12">00–99</text>
+  </g>
+</svg>
