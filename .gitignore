@@ -3,3 +3,17 @@ Thumbs.db
 Desktop.ini
 node_modules/
 .keep
+
+# Agregado automáticamente por GitPulse Studio
+.env
+.env.local
+.env.*.local
+!.env.example
+*.log
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite
+dist/
+.cache/
