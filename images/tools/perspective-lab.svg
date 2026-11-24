@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#13222c"/>
+      <stop offset="100%" stop-color="#090f14"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="22" fill="url(#bg)" stroke="#223140" stroke-width="2"/>
+  <!-- Horizon line & 2 Vanishing Points -->
+  <line x1="16" y1="48" x2="112" y2="48" stroke="#6fd0e8" stroke-width="1.6" stroke-dasharray="4 3"/>
+  <circle cx="20" cy="48" r="3.5" fill="#5fd39a"/>
+  <circle cx="108" cy="48" r="3.5" fill="#5fd39a"/>
+  <!-- Projection rays -->
+  <g stroke="#33475a" stroke-width="1.2">
+    <line x1="20" y1="48" x2="64" y2="88"/>
+    <line x1="108" y1="48" x2="64" y2="88"/>
+    <line x1="20" y1="48" x2="64" y2="56"/>
+    <line x1="108" y1="48" x2="64" y2="56"/>
+  </g>
+  <!-- 2P Cube -->
+  <polygon points="64,56 88,65 88,80 64,88 40,80 40,65" fill="rgba(111,208,232,0.14)" stroke="#ecdec2" stroke-width="2" stroke-linejoin="round"/>
+  <line x1="64" y1="56" x2="64" y2="88" stroke="#ecdec2" stroke-width="2"/>
+  <path d="M40 65 L64 73 L88 65" fill="none" stroke="#6fd0e8" stroke-width="1.8"/>
+  <!-- Golden ratio arc hint -->
+  <path d="M78 24 A18 18 0 0 1 96 42" fill="none" stroke="#5fd39a" stroke-width="1.8" stroke-linecap="round"/>
+  <text x="64" y="110" text-anchor="middle" fill="#6fd0e8" font-family="monospace" font-size="9.4" font-weight="700" letter-spacing="0.6">1P · 2P · PHI · [44]</text>
+</svg>

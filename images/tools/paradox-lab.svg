@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#13222c"/>
+      <stop offset="100%" stop-color="#090f14"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="22" fill="url(#bg)" stroke="#223140" stroke-width="2"/>
+  <!-- Penrose Impossible Triangle -->
+  <polygon points="64,22 100,82 28,82" fill="none" stroke="#ecdec2" stroke-width="2.4" stroke-linejoin="round"/>
+  <polygon points="64,39 84,73 44,73" fill="rgba(111,208,232,0.12)" stroke="#6fd0e8" stroke-width="2" stroke-linejoin="round"/>
+  <line x1="64" y1="22" x2="74" y2="39" stroke="#5fd39a" stroke-width="2.2"/>
+  <line x1="100" y1="82" x2="80" y2="82" stroke="#5fd39a" stroke-width="2.2"/>
+  <line x1="28" y1="82" x2="38" y2="65" stroke="#5fd39a" stroke-width="2.2"/>
+  <!-- Infinity mark -->
+  <text x="64" y="66" text-anchor="middle" fill="#5fd39a" font-family="sans-serif" font-size="22" font-weight="700">∞</text>
+  <text x="64" y="110" text-anchor="middle" fill="#6fd0e8" font-family="monospace" font-size="10.2" font-weight="700" letter-spacing="0.9">PARADOX · [44]</text>
+</svg>

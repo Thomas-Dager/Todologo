@@ -144,6 +144,7 @@ body.clean .ractions, body.clean .rhint { display: none; }
 
 /* ---------- region map ---------- */
 .rail {
+  width: 100%; box-sizing: border-box; min-width: 0;
   flex: 0 1 auto; min-height: 150px;   /* on short screens the map scrolls so the view controls stay whole */
   overflow-y: auto;
   background: var(--panel); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
@@ -180,8 +181,8 @@ body.clean .ractions, body.clean .rhint { display: none; }
 }
 .panel h3 { margin: 0 0 7px; font-size: 10.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
 /* Segments share the width equally, but a longer label (e.g. "Entraînement") takes the room it needs. */
-.seg { display: flex; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 3px; gap: 3px; }
-.seg button { flex: 1 1 0; white-space: nowrap; font: inherit; font-weight: 600; font-size: 13px; color: var(--muted); background: transparent; border: 0; border-radius: 6px; padding: 7px 6px; cursor: pointer; }
+.seg { display: flex; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 3px; gap: 3px; min-width: 0; }
+.seg button { flex: 1 1 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: inherit; font-weight: 600; font-size: 13px; color: var(--muted); background: transparent; border: 0; border-radius: 6px; padding: 7px 6px; cursor: pointer; }
 .seg button[aria-pressed="true"] { background: var(--bg-lift); color: var(--fg); box-shadow: inset 0 0 0 1px var(--line-strong); }
 .seg button:hover { color: var(--fg); }
 .row { display: flex; gap: 6px; flex-wrap: wrap; }
@@ -191,8 +192,8 @@ body.clean .ractions, body.clean .rhint { display: none; }
 .btn.primary { background: var(--bone); color: #1b1610; border-color: var(--bone); }
 .btn.primary:hover { filter: brightness(1.05); }
 .btn:disabled { opacity: .45; cursor: default; }
-.views { display: flex; gap: 5px; }
-.views .btn { flex: 1 1 0; white-space: nowrap; padding: 6px 4px; font-size: 12px; }
+.views { display: flex; gap: 5px; min-width: 0; }
+.views .btn { flex: 1 1 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 6px 4px; font-size: 12px; }
 /* Brain, Engine and Bone Landmarks have more views than fit in a row: three to a row */
 :where([data-atlas="brain"], [data-atlas="engine"], [data-atlas="landmarks"]) .views { display: grid; grid-template-columns: repeat(3, 1fr); }
 :where([data-atlas="engine"]) .views .btn { flex: 0 1 auto; padding: 6px 2px; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
@@ -229,6 +230,7 @@ body.clean .ractions, body.clean .rhint { display: none; }
 
 /* ---------- view controls ---------- */
 .viewcard {
+  width: 100%; box-sizing: border-box; min-width: 0;
   flex: none;
   background: var(--panel); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--line); border-radius: var(--r); padding: 10px 10px 11px;
@@ -249,23 +251,24 @@ body.clean .ractions, body.clean .rhint { display: none; }
 .voice-heard.ok { color: var(--ok); }
 .voice-heard.bad { color: var(--bad); white-space: normal; line-height: 1.45; }
 .vc-head h3 { margin: 0 0 0 4px; font-size: 10.5px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
-.vc-sec { display: grid; gap: 5px; }
+.vc-sec { display: grid; gap: 5px; min-width: 0; }
 .vc-sec h4 { margin: 0 0 0 4px; font-size: 11.5px; font-weight: 600; color: var(--muted); }
 .viewcard .seg button { padding: 5px 6px; font-size: 12.5px; }
-.zp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.zp-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; min-width: 0; }
 :where([data-atlas="engine"], [data-atlas="landmarks"]) .zp-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .zchip {
+  min-width: 0; overflow: hidden;
   font: inherit; font-size: 12.5px; color: var(--fg); background: transparent; border: 1px solid var(--line); border-radius: 7px;
   padding: 4px 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: baseline; gap: 6px; text-align: left; white-space: nowrap;
 }
 .zchip span { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
-.zchip kbd { font-family: var(--f-mono); font-size: 10.5px; color: var(--muted); }
+.zchip kbd { font-family: var(--f-mono); font-size: 10.5px; color: var(--muted); flex: none; }
 .zchip:hover { border-color: var(--line-strong); }
 .zchip[aria-pressed="true"] { border-color: var(--scan); background: rgba(111, 208, 232, 0.09); }
 .zchip[aria-pressed="true"] kbd { color: var(--scan); }
 .zchip:disabled { opacity: .35; cursor: default; }
-.vc-tools { display: flex; flex-wrap: wrap; gap: 5px; }
-.vc-tools .btn { flex: 1 1 0; padding: 6px 4px; font-size: 12px; white-space: nowrap; }
+.vc-tools { display: flex; flex-wrap: wrap; gap: 5px; min-width: 0; }
+.vc-tools .btn { flex: 1 1 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; padding: 6px 4px; font-size: 12px; white-space: nowrap; }
 :where([data-atlas="engine"]) .vc-tools .btn { flex: 1 1 calc(50% - 3px); min-width: 0; }
 #unhideBtn { flex-basis: 100%; }
 .viewcard .hint { margin: 0 4px; font-size: 11.5px; }

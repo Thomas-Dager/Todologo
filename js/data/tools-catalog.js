@@ -25,6 +25,30 @@ window.TOOLS_CATALOG = [
     }
   },
   {
+    code: "T001",
+    category: "Anatomy",
+    status: "Online",
+    engine: "standalone",
+    url: "tools/bone-atlas/index.html",
+    icon: "images/tools/bone-atlas.webp",
+    title: {
+      es: "Atlas Óseo 3D",
+      en: "Bone Atlas",
+      pt: "Atlas Ósseo",
+      fr: "Atlas des Os",
+      de: "Knochen-Atlas",
+      it: "Atlante delle Ossa"
+    },
+    description: {
+      es: "Encuentra los 206 huesos del esqueleto humano en 3D, región por región y por capas.",
+      en: "Find all 206 bones of the human skeleton in 3D, region by region and layer by layer.",
+      pt: "Encontre todos os 206 ossos do esqueleto humano em 3D, região por região.",
+      fr: "Trouvez les 206 os du squelette humain en 3D, région par région et couche par couche.",
+      de: "Finde alle 206 Knochen des menschlichen Skeletts in 3D, Region für Region.",
+      it: "Trova tutte le 206 ossa dello scheletro umano in 3D, regione per regione."
+    }
+  },
+  {
     code: "T003",
     category: "Anatomy",
     status: "Online",
@@ -502,6 +526,318 @@ window.TOOLS_CATALOG = [
       fr: "Maîtrisez 12 ouvertures classiques et hypermodernes coup par coup sur échiquier légal 8×8, plans et pièges tactiques.",
       de: "Meistere 12 klassische und hypermoderne Eröffnungen Zug für Zug am echten 8×8-Brett samt Plänen und Fallen.",
       it: "Padroneggia 12 aperture classiche e ipermoderne mossa per mossa su scacchiera legale 8×8, piani e trappole tipiche."
+    }
+  },
+  {
+    code: "T030",
+    category: "Machines",
+    status: "Online",
+    engine: "standalone",
+    url: "tools/car-brands/index.html",
+    icon: "images/tools/car-brands.webp",
+    title: {
+      es: "Marcas de Autos",
+      en: "Car Brands",
+      pt: "Marcas de Carros",
+      fr: "Marques Automobiles",
+      de: "Automarken",
+      it: "Marche d'Auto"
+    },
+    description: {
+      es: "Aprende a reconocer 153 marcas de autos por su logo en 4 regiones y 25 países con repetición espaciada y escritura tolerante.",
+      en: "Learn to recognize 153 car brands by their emblem across 4 regions and 25 countries with spaced repetition and fuzzy typing.",
+      pt: "Aprenda a reconhecer 153 marcas de carros pelo logotipo em 4 regiões e 25 países com repetição espaçada.",
+      fr: "Apprenez à reconnaître 153 marques automobiles à leur emblème dans 25 pays avec répétition espacée et saisie tolérante.",
+      de: "Lerne 153 Automarken aus 25 Ländern an ihrem Logo zu erkennen — mit Spaced Repetition und fehlertoleranter Eingabe.",
+      it: "Impara a riconoscere 153 marche automobilistiche dal logo in 25 paesi con ripetizione dilazionata e quiz a tempo."
+    }
+  },
+  {
+    code: "T031",
+    category: "Machines",
+    status: "Online",
+    engine: "standalone",
+    url: "tools/car-models/index.html",
+    icon: "images/tools/car-models.svg",
+    title: {
+      es: "Modelos de Autos",
+      en: "Car Models",
+      pt: "Modelos de Carros",
+      fr: "Modèles Automobiles",
+      de: "Automodelle",
+      it: "Modelli d'Auto"
+    },
+    description: {
+      es: "Reconoce 220 autos en 4 colecciones: clásicos 50s–90s, íconos de Argentina y LATAM, modernos/SUVs/pick-ups y superdeportivos/EVs.",
+      en: "Identify 220 cars across 4 collections: 50s–90s classics, Argentina & LATAM legends, modern SUVs/pickups, and supercars/EVs.",
+      pt: "Reconheça 220 carros em 4 coleções: clássicos 50s–90s, ícones da América Latina, modernos/SUVs/picapes e superesportivos/EVs.",
+      fr: "Identifiez 220 voitures en 4 collections : classiques 50–90, icônes d'Amérique latine, SUV/pick-ups modernes et supercars/EV.",
+      de: "Erkenne 220 Autos in 4 Sammlungen: Klassiker 50er–90er, Südamerika-Ikonen, moderne SUVs/Pick-ups und Supercars/EVs.",
+      it: "Riconosci 220 auto in 4 collezioni: classiche anni 50–90, icone Sudamerica, SUV/pick-up moderni e supercar/EV."
+    }
+  },
+  {
+    code: "T032",
+    category: "Machines",
+    status: "Online",
+    engine: "standalone",
+    url: "tools/aircraft-spotter/index.html",
+    icon: "images/tools/aircraft-spotter.svg",
+    title: {
+      es: "Aviones y Cazas",
+      en: "Aircraft Spotter",
+      pt: "Aviões e Caças",
+      fr: "Avions & Chasseurs",
+      de: "Flugzeuge & Jets",
+      it: "Aerei e Caccia"
+    },
+    description: {
+      es: "Identifica 52 aviones comerciales, cargueros, cazas furtivos, históricos y helicópteros por winglets, motores y silueta.",
+      en: "Identify 52 commercial airliners, heavy cargo lifters, stealth fighters, historic props and helicopters.",
+      pt: "Identifique 52 aviões comerciais, cargueiros, caças furtivos, históricos e helicópteros por winglets e motores.",
+      fr: "Identifiez 52 avions de ligne, cargos, chasseurs furtifs, modèles historiques et hélicoptères.",
+      de: "Erkenne 52 Passagierflugzeuge, Frachter, Tarnkappenjets, Klassiker und Hubschrauber an Triebwerken und Winglets.",
+      it: "Identifica 52 aerei commerciali, cargo, caccia stealth, storici ed elicotteri da motori e silhouette."
+    }
+  },
+  {
+    code: "T033",
+    category: "Languages",
+    status: "Online",
+    engine: "standalone",
+    url: "tools/art-movements/index.html",
+    icon: "images/tools/art-movements.svg",
+    title: {
+      es: "Obras de Arte y Pintores",
+      en: "Art & Painters",
+      pt: "Obras de Arte e Pintores",
+      fr: "Œuvres d'Art & Peintres",
+      de: "Kunstwerke & Maler",
+      it: "Opere d'Arte e Pittori"
+    },
+    description: {
+      es: "Reconoce 52 pinturas maestras en 4 movimientos artísticos preguntando por obra o pintor con encuadre museográfico.",
+      en: "Identify 52 masterpieces across 4 art movements—quiz yourself on painting titles or artists with full framing.",
+      pt: "Reconheça 52 obras-primas em 4 movimentos artísticos escolhendo entre título da obra ou pintor.",
+      fr: "Reconnaissez 52 chefs-d'œuvre dans 4 mouvements artistiques en alternant quiz d'œuvre ou d'artiste.",
+      de: "Erkenne 52 Meisterwerke aus 4 Kunstepochen und trainiere wahlweise Gemäldetitel oder Künstler.",
+      it: "Riconosci 52 capolavori in 4 correnti artistiche scegliendo tra titolo dell'opera o pittore."
+    }
+  },
+  {
+    code: "T034",
+    category: "Science",
+    status: "Online",
+    engine: "standalone",
+    url: "tools/tree-atlas/index.html",
+    icon: "images/tools/tree-atlas.svg",
+    title: {
+      es: "Árboles y Flora",
+      en: "Tree Atlas",
+      pt: "Árvores e Flora",
+      fr: "Atlas des Arbres",
+      de: "Baum-Atlas",
+      it: "Atlante degli Alberi"
+    },
+    description: {
+      es: "Aprende 48 especies arbóreas de Sudamérica y el mundo por hojas, flores y corteza, aceptando nombres en latín.",
+      en: "Learn 48 South American and world tree species by leaf, flower and bark, with Latin binomial support.",
+      pt: "Aprenda 48 espécies de árvores da América do Sul e do mundo por folhas, flores e casca, com nomes em latim.",
+      fr: "Apprenez 48 espèces d'arbres d'Amérique du Sud et du monde par feuilles, fleurs et écorce (noms latins inclus).",
+      de: "Lerne 48 Baumarten aus Südamerika und der Welt an Blatt, Blüte und Rinde — inklusive lateinischer Namen.",
+      it: "Impara 48 specie di alberi del Sudamerica e del mondo da foglie, fiori e corteccia, con nomi in latino."
+    }
+  },
+  {
+    code: "T035",
+    category: "Science",
+    status: "Online",
+    engine: "standalone",
+    url: "tools/rocks-gems/index.html",
+    icon: "images/tools/rocks-gems.svg",
+    title: {
+      es: "Minerales, Rocas y Gemas",
+      en: "Minerals, Rocks & Gems",
+      pt: "Minerais, Rochas e Gemas",
+      fr: "Minéraux, Roches & Gemmes",
+      de: "Minerale, Gesteine & Edelsteine",
+      it: "Minerali, Rocce e Gemme"
+    },
+    description: {
+      es: "Identifica 50 gemas, sulfuros metálicos, cristales y rocas por brillo, hábito cristalino, fórmula y dureza Mohs.",
+      en: "Identify 50 gemstones, metallic ores, crystals and rocks by luster, crystal habit, formula and Mohs hardness.",
+      pt: "Identifique 50 gemas, sulfetos metálicos, cristais e rochas por brilho, fórmula química e dureza Mohs.",
+      fr: "Identifiez 50 gemmes, minerais métalliques, cristaux et roches par éclat, formule et dureté de Mohs.",
+      de: "Identifiziere 50 Edelsteine, Erze, Kristalle und Gesteine nach Glanz, chemischer Formel und Mohshärte.",
+      it: "Identifica 50 gemme, solfuri metallici, cristalli e rocce per lucentezza, formula chimica e durezza Mohs."
+    }
+  },
+  {
+    code: "T036",
+    category: "Languages",
+    status: "Online",
+    engine: "standalone",
+    url: "tools/morse-trainer/index.html",
+    icon: "images/tools/morse-trainer.svg",
+    title: {
+      es: "Código Morse y Señales",
+      en: "Morse & Signals",
+      pt: "Código Morse e Sinais",
+      fr: "Code Morse & Signaux",
+      de: "Morsecode & Signale",
+      it: "Codice Morse e Segnali"
+    },
+    description: {
+      es: "Domina 46 códigos Morse con audio CW a 650 Hz, lámpara óptica, manipulador en vivo, traductor, alfabeto OTAN y banderas ICS.",
+      en: "Master 46 Morse symbols with 650 Hz CW audio, optical lamp, live straight key, translator, NATO phonetic & ICS flags.",
+      pt: "Domine 46 códigos Morse com áudio CW de 650 Hz, lâmpada óptica, manipulador, tradutor, alfabeto OTAN e bandeiras ICS.",
+      fr: "Maîtrisez 46 codes Morse avec audio CW 650 Hz, lampe optique, manipulateur, traducteur, alphabet OTAN et pavillons ICS.",
+      de: "Lerne 46 Morsezeichen mit 650-Hz-CW-Audio, optischer Lampe, Taste, Live-Übersetzer, NATO-Alphabet und ICS-Flaggen.",
+      it: "Impara 46 codici Morse con audio CW a 650 Hz, lampada ottica, tasto telegrafico, traduttore, alfabeto NATO e bandiere ICS."
+    }
+  },
+  {
+    code: "T037",
+    category: "Machines",
+    status: "Online",
+    engine: "standalone",
+    url: "tools/net-protocols/index.html",
+    icon: "images/tools/net-protocols.svg",
+    title: {
+      es: "Protocolos de Red y Puertos",
+      en: "Network Protocols & Ports",
+      pt: "Protocolos de Rede e Portas",
+      fr: "Protocoles Réseau & Ports",
+      de: "Netzwerkprotokolle & Ports",
+      it: "Protocolli di Rete e Porte"
+    },
+    description: {
+      es: "Domina 48 protocolos de red y web (HTTPS, HTTP/3, TLS, DNS, SSH, TCP, BGP, ARP) con diagramas OSI, secuencias y trazas tcpdump.",
+      en: "Master 48 network and web protocols (HTTPS, HTTP/3, TLS, DNS, SSH, TCP, BGP, ARP) with OSI layers, sequences and tcpdump traces.",
+      pt: "Domine 48 protocolos de rede e web (HTTPS, HTTP/3, TLS, DNS, SSH, TCP, BGP, ARP) com diagramas OSI, sequências e traços tcpdump.",
+      fr: "Maîtrisez 48 protocoles réseau et web (HTTPS, HTTP/3, TLS, DNS, SSH, TCP, BGP, ARP) avec couches OSI, séquences et traces tcpdump.",
+      de: "Meistere 48 Netzwerk- und Webprotokolle (HTTPS, HTTP/3, TLS, DNS, SSH, TCP, BGP, ARP) mit OSI-Schichten, Sequenzen und tcpdump.",
+      it: "Padroneggia 48 protocolli di rete e web (HTTPS, HTTP/3, TLS, DNS, SSH, TCP, BGP, ARP) con livelli OSI, sequenze e tracce tcpdump."
+    }
+  },
+  {
+    code: "T038",
+    category: "Languages",
+    status: "Online",
+    engine: "standalone",
+    url: "tools/ear-trainer/index.html",
+    icon: "images/tools/ear-trainer.svg",
+    title: {
+      es: "Oído Musical e Intervalos",
+      en: "Ear Training & Intervals",
+      pt: "Ouvido Musical e Intervalos",
+      fr: "Oreille Musicale et Intervalles",
+      de: "Gehörbildung & Intervalle",
+      it: "Orecchio Musicale e Intervalli"
+    },
+    description: {
+      es: "Reconoce 48 intervalos, acordes, modos griegos y lectura en clave de Sol y Fa con síntesis Web Audio, pentagrama y piano interactivo.",
+      en: "Recognize 48 musical intervals, chords, Greek modes, and Treble/Bass clef notes using Web Audio synthesis, staff SVG and interactive piano.",
+      pt: "Reconheça 48 intervalos, acordes, modos gregos e leitura em claves de Sol e Fá com síntese Web Audio, pauta e piano interativo.",
+      fr: "Reconnaissez 48 intervalles, accords, modes grecs et notes en clés de Sol/Fa avec synthèse Web Audio, portée et piano interactif.",
+      de: "Erkenne 48 Intervalle, Akkorde, Kirchentonarten sowie Violin- und Bassschlüssel mit Web-Audio-Synthese, Notensystem und Klavier.",
+      it: "Riconosci 48 intervalli, accordi, modi greci e lettura in chiave di Sol e Fa con sintesi Web Audio, pentagramma e pianoforte interattivo."
+    }
+  },
+  {
+    code: "T039",
+    category: "Languages",
+    status: "Online",
+    engine: "standalone",
+    url: "tools/mythology-atlas/index.html",
+    icon: "images/tools/mythology-atlas.svg",
+    title: {
+      es: "Mitologías Comparadas",
+      en: "Comparative Mythology Atlas",
+      pt: "Mitologias Comparadas",
+      fr: "Mythologies Comparées",
+      de: "Vergleichende Mythologie",
+      it: "Mitologie Comparate"
+    },
+    description: {
+      es: "Domina 48 deidades y héroes (Grecia, Roma, Nórdica, Egipto, Japón y Mesoamérica), atributos iconográficos y equivalencias culturales.",
+      en: "Master 48 deities & heroes across Greek/Roman, Norse/Celtic, Egyptian, Shinto & Mesoamerican pantheons, iconography and parallels.",
+      pt: "Domine 48 divindades (Grécia, Roma, Nórdica, Egito, Japão e Mesoamérica), atributos iconográficos e equivalências culturais.",
+      fr: "Maîtrisez 48 divinités (grecque, nordique, égyptienne, japonaise, mésoaméricaine), attributs iconographiques et équivalences.",
+      de: "Meistere 48 Gottheiten (griechisch, nordisch, ägyptisch, Shinto, mesoamerikanisch), Ikonographie und kulturelle Parallelen.",
+      it: "Padroneggia 48 divinità (greca, norrena, egizia, shintoista e mesoamericana), attributi iconografici ed equivalenze culturali."
+    }
+  },
+  {
+    code: "T040",
+    category: "Science",
+    status: "Online",
+    engine: "standalone",
+    url: "tools/perspective-lab/index.html",
+    icon: "images/tools/perspective-lab.svg",
+    title: {
+      es: "Perspectiva y Composición",
+      en: "Perspective & Composition Lab",
+      pt: "Perspectiva e Composição",
+      fr: "Perspective et Composition",
+      de: "Perspektive & Komposition",
+      it: "Prospettiva e Composizione"
+    },
+    description: {
+      es: "Entrena 44 leyes visuales: 1, 2 y 3 puntos de fuga, horizonte, tercios, espiral áurea, planos cinematográficos y claro-oscuro 3D.",
+      en: "Train 44 visual rules: 1/2/3-point vanishing grids, horizon lines, rule of thirds, golden spiral, camera framing and 3D chiaroscuro shading.",
+      pt: "Treine 44 leis visuais: 1, 2 e 3 pontos de fuga, horizonte, terços, espiral áurea, enquadramento e volume claro-escuro 3D.",
+      fr: "Maîtrisez 44 règles visuelles : points de fuite (1/2/3), ligne d'horizon, règle des tiers, spirale d'or, cadrage et ombre-lumière 3D.",
+      de: "Trainiere 44 Gestaltungsregeln: 1/2/3-Punkt-Fluchtpunkte, Horizont, Drittelregel, Goldener Schnitt und 3D-Licht-Schatten-Volumen.",
+      it: "Allena 44 leggi visive: 1, 2 e 3 punti di fuga, orizzonte, regola dei terzi, spirale aurea, inquadrature e chiaroscuro 3D."
+    }
+  },
+  {
+    code: "T041",
+    category: "Science",
+    status: "Online",
+    engine: "standalone",
+    url: "tools/doomsday-trainer/index.html",
+    icon: "images/tools/doomsday-trainer.svg",
+    title: {
+      es: "Calendario Mental Doomsday",
+      en: "Doomsday Perpetual Calendar",
+      pt: "Calendário Mental Doomsday",
+      fr: "Calendrier Mental Doomsday",
+      de: "Doomsday-Kopfrechenkalender",
+      it: "Calendario Mentale Doomsday"
+    },
+    description: {
+      es: "Calcula mentalmente en 5 segundos el día semanal de cualquier fecha histórica o futura con el algoritmo de John Conway y simulador en vivo.",
+      en: "Mentally calculate the weekday of any past or future date in 5 seconds using John Conway's Doomsday algorithm and live calculator.",
+      pt: "Calcule mentalmente em 5 segundos o dia da semana de qualquer data histórica ou futura com o método de John Conway.",
+      fr: "Calculez mentalement en 5 secondes le jour de la semaine de n'importe quelle date avec l'algorithme Doomsday de John Conway.",
+      de: "Berechne den Wochentag jedes historischen oder zukünftigen Datums in 5 Sekunden im Kopf mit John Conways Doomsday-Algorithmus.",
+      it: "Calcola mentalmente in 5 secondi il giorno della settimana di qualsiasi data con l'algoritmo Doomsday di John Conway e simulatore."
+    }
+  },
+  {
+    code: "T042",
+    category: "Science",
+    status: "Online",
+    engine: "standalone",
+    url: "tools/paradox-lab/index.html",
+    icon: "images/tools/paradox-lab.svg",
+    title: {
+      es: "Paradojas Matemáticas y Lógicas",
+      en: "Math & Logic Paradoxes",
+      pt: "Paradoxos Matemáticos e Lógicos",
+      fr: "Paradoxes Mathématiques et Logiques",
+      de: "Mathe- & Logik-Paradoxa",
+      it: "Paradossi Matematici e Logici"
+    },
+    description: {
+      es: "Explora 44 paradojas visuales y formales: Simpson, Monty Hall (100 puertas), Escalera de Penrose, Hotel de Hilbert, Russell y Braess.",
+      en: "Explore 44 visual & formal paradoxes: Simpson's reversal, 100-door Monty Hall, Penrose stairs, Hilbert's Hotel, Russell & Braess.",
+      pt: "Explore 44 paradoxos visuais e formais: Simpson, Monty Hall (100 portas), Escada de Penrose, Hotel de Hilbert, Russell e Braess.",
+      fr: "Explorez 44 paradoxes visuels et formels : Simpson, Monty Hall (100 portes), escalier de Penrose, hôtel de Hilbert, Russell et Braess.",
+      de: "Erkunde 44 visuelle & formale Paradoxa: Simpson-Paradoxon, 100-Türen-Monty-Hall, Penrose-Treppe, Hilberts Hotel, Russell & Braess.",
+      it: "Esplora 44 paradossi visivi e formali: Simpson, Monty Hall (100 porte), scala di Penrose, hotel di Hilbert, Russell e Braess."
     }
   }
 ];
